@@ -12,6 +12,7 @@ import tempfile
 import time
 import unittest
 
+_marker = object()
 
 def grap_stdout(callable, *args, **kw):
     orig_stdout = sys.stdout
@@ -19,57 +20,56 @@ def grap_stdout(callable, *args, **kw):
     try:
         result = callable(*args, **kw)
         return sys.stdout.getvalue(), result
+    except:
+        output = sys.stdout.getvalue()
+        orig_stdout.write(output)
+        return output, _marker
     finally:
         sys.stdout = orig_stdout
+
+def grap_stderr(callable, *args, **kw):
+    orig_stderr = sys.stderr
+    sys.stderr = StringIO.StringIO()
+    try:
+        result = callable(*args, **kw)
+        return sys.stderr.getvalue(), result
+    except:
+        output = sys.stderr.getvalue()
+        orig_stderr.write(output)
+        return output, _marker
+    finally:
+        sys.stderr = orig_stderr
 
 
 class TestMangle(unittest.TestCase):
 
-    def read_stdout(self):
-        return sys.stdout.getvalue()
-
-    def setUp(self):
-        self.stdout = sys.stdout
-        sys.stdout = StringIO.StringIO()
-
-    def tearDown(self):
-        sys.stdout = self.stdout
-
     def callFUT(self, *args):
-        return grap_stdout(
-            icemac.callonchange.mangle_call_args(*args))
+        return grap_stdout(icemac.callonchange.mangle_call_args, *args)
 
     def test_no_args(self):
         stdout, result = self.callFUT(None, None, [])
         self.assertEqual((None, None), result)
         self.failUnless(stdout.startswith('USAGE'))
 
-# XXX
-
     def test_missing_params(self):
-        self.assertEqual((None, None),
-                         icemac.callonchange.mangle_call_args('.', None, []))
-        self.failUnless(self.read_stdout().startswith('USAGE'))
+        stdout, result = self.callFUT('.', None, [])
+        self.assertEqual((None, None), result)
+        self.failUnless(stdout.startswith('USAGE'))
 
     def test_no_additional_args(self):
-        self.assertEqual(
-            ('.', ['bin/test']),
-            icemac.callonchange.mangle_call_args('.', 'bin/test', []))
-        self.assertEqual(self.read_stdout(), '')
+        stdout, result = self.callFUT('.', 'bin/test', [])
+        self.assertEqual(('.', ['bin/test']), result)
+        self.assertEqual(stdout, '')
 
     def test_additional_args(self):
-        self.assertEqual(
-            ('.', ['bin/test', '-t', 'TestMangle']),
-            icemac.callonchange.mangle_call_args(
-                '.', 'bin/test', ['-t', 'TestMangle']))
-        self.assertEqual(self.read_stdout(), '')
+        stdout, result = self.callFUT('.', 'bin/test', ['-t', 'TestMangle'])
+        self.assertEqual(('.', ['bin/test', '-t', 'TestMangle']), result)
+        self.assertEqual(stdout, '')
 
     def test_only_additional_args(self):
-        self.assertEqual(
-            ('.', ['bin/test', '-v']),
-            icemac.callonchange.mangle_call_args(
-                None, None, ['.', 'bin/test', '-v']))
-        self.assertEqual(self.read_stdout(), '')
+        stdout, result = self.callFUT(None, None, ['.', 'bin/test', '-v'])
+        self.assertEqual(('.', ['bin/test', '-v']), result)
+        self.assertEqual(stdout, '')
 
 
 class TestObserver(unittest.TestCase):
@@ -92,10 +92,8 @@ class TestObserver(unittest.TestCase):
 
     def setUp(self):
         self.basedir = tempfile.mkdtemp()
-        super(TestObserver, self).setUp()
 
     def tearDown(self):
-        super(TestObserver, self).tearDown()
         shutil.rmtree(self.basedir)
 
     def test_observer(self):
@@ -103,17 +101,26 @@ class TestObserver(unittest.TestCase):
             self.basedir, [self.createScript()])
         observer.start()
         os.mkdir(os.path.join(self.basedir, '1'))
-        time.sleep(0.5)
+        time.sleep(1)
         try:
             self.assertEqual('script called',
-                             file(os.path.join(self.basedir, 'result')). read())
+                             file(os.path.join(self.basedir, 'result')).read())
         finally:
             observer.stop()
 
-    def test_script_error(self):
-        observer = icemac.callonchange.Observer(
-            self.basedir, ['asdf'])
-        observer.start()
-        os.mkdir(os.path.join(self.basedir, '1'))
-        time.sleep(0.5)
+    def test_not_existing_script(self):
+        try:
+            orig_stdout = sys.stdout
+            sys.stderr = StringIO.StringIO()
+            sys.stdout = StringIO.StringIO()
+            observer = icemac.callonchange.Observer(
+                self.basedir, ['asdf'])
+            observer.start()
+            os.mkdir(os.path.join(self.basedir, '1'))
+            time.sleep(1)
+            self.assertEqual(
+                "OSError: (2, 'No such file or directory')\n"
+                "Popen params were:  ('asdf',)\n", sys.stdout.getvalue())
+        finally:
+            sys.stdout = orig_stdout
 

@@ -19,8 +19,8 @@ def callbackFactory(*params):
         try:
             subprocess.Popen(params)
         except OSError, e:
-            print "OSError %s %s" % e.args
-            print "Popen params where: ",
+            print "OSError: %s" % (e.args,)
+            print "Popen params were: ",
             print params
             sys.exit(-1)
     return callback
