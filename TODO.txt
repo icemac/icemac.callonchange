@@ -1,11 +1,13 @@
-=======
- To do
-=======
+To do
+=====
 
-- Default arguments do not allow to use `callonchange` on command line.
-  (maybe for buildout integration a recipe is needed)
+- Ease buildout integration by providing a buildout recipe with
+  default arguments.
 
-- Not useable for latex documents as calling `latex document.tex` changes
-  the directory which leads to calling it over and over again.
-  (Need option to select document extension for which the script should be
-  called.)
+- icemac.callonchange is currently not useable in situations where the
+  command changes something in the observed diretory. (e. g. LaTeX
+  documents can't be created with it as the creation changes the
+  observed diretory which starts creation ... over and over again.
+  (Need an ability to select file extension(s) for which the command
+  should be run.)
+

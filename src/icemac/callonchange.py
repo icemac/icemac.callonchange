@@ -7,14 +7,15 @@ import subprocess
 import sys
 import time
 
-
-def print_usage():
-    print "USAGE: callonchange <path> <binary>"
-    print "Calls the <binary> when the <path> or something in it changes."
+USAGE = """\
+USAGE: callonchange <path> <command> [<arg1> <arg2> ...]
+Calls <command> with <arg>s when <path> or something in it changes.
+<command> can be a binary or a script.
+"""
 
 
 def callbackFactory(*params):
-
+    "Create callback function."
     def callback(subpath, mask):
         try:
             subprocess.Popen(params)
@@ -26,7 +27,7 @@ def callbackFactory(*params):
     return callback
 
 class Observer(object):
-
+    "Observer for path."
     def __init__(self, path, params):
         self.path = path
         self.params = params
@@ -43,41 +44,26 @@ class Observer(object):
         self.observer.stop()
 
 
-def mangle_call_args(path, params, argv):
+def mangle_call_args(args, argv):
+    "Mange buildout and sys.argv parameters into one list."
+    args = tuple(args) + tuple(argv)
+    if len(args) < 2:
+        print USAGE
+        return None, None
+    return args[0], args[1:]
 
-    argv.reverse()
 
+def callonchange(*args):
+    "Main function which can handle buildout and sys.argv parameters."
+    path, params = mangle_call_args(args, sys.argv[1:])
     if path is None:
-        try:
-            path = argv.pop()
-        except IndexError:
-            print_usage()
-            return None, None
-    if params is None:
-        try:
-            params = argv.pop()
-        except IndexError:
-            print_usage()
-            return None, None
-    if isinstance(params, basestring):
-        params = [params]
-    if len(argv):
-        params.extend(reversed(argv))
-    return path, params
-
-
-def callonchange(path="src", params="bin/test"):
-
-    args = sys.argv[1:]
-
-    path, params = mangle_call_args(path, params, args)
-    if (path, params) != (None, None):
-        observer = Observer(path, params)
-        observer.start()
-        try:
-            while True:
-                time.sleep(1)
-        except KeyboardInterrupt:
-            pass
-        finally:
-            observer.stop()
+        return
+    observer = Observer(path, params)
+    observer.start()
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        observer.stop()
