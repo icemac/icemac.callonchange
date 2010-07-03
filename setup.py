@@ -11,6 +11,8 @@ def read(*path_elements):
 
 version = '0.2dev'
 
+tests_require = ['zc.buildout',
+                ]
 
 setuptools.setup(
     name='icemac.callonchange',
@@ -25,7 +27,7 @@ setuptools.setup(
         'Development Status :: 3 - Alpha',
         'Environment :: Console',
         'Environment :: MacOS X',
-#        'Framework :: Buildout',
+        'Framework :: Buildout',
         'Intended Audience :: Developers',
         'License :: OSI Approved',
         'License :: OSI Approved :: Zope Public License',
@@ -52,9 +54,14 @@ setuptools.setup(
         'MacFSEvents',
         'setuptools',
         ],
+    extras_require = dict(
+        test=tests_require),
     entry_points="""
       [console_scripts]
       callonchange = icemac.callonchange.script:callonchange
+      [zc.buildout]
+      default = icemac.callonchange.recipe:Recipe
       """,
+    tests_require=tests_require,
     test_suite="icemac.callonchange.tests",
     )

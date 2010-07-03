@@ -1,0 +1,20 @@
+=================
+ Buildout recipe
+=================
+
+There is a recipe to ease buildout integration.
+
+>>> write(sample_buildout, 'buildout.cfg',
+... """
+... [buildout]
+... parts = coc
+...
+... [coc]
+... recipe = icemac.callonchange
+... """)
+
+>>> import os
+>>> os.chdir(sample_buildout)
+>>> buildout = os.path.join(sample_buildout, 'bin', 'buildout')
+>>> print system(buildout),
+Installing coc.
