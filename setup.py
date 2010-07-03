@@ -54,7 +54,7 @@ setuptools.setup(
         ],
     entry_points="""
       [console_scripts]
-      callonchange = icemac.callonchange:callonchange
+      callonchange = icemac.callonchange.script:callonchange
       """,
-    test_suite="icemac.tests",
+    test_suite="icemac.callonchange.tests",
     )

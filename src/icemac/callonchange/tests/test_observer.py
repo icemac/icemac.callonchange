@@ -3,7 +3,7 @@
 # See also LICENSE.txt
 
 import StringIO
-import icemac.callonchange
+import icemac.callonchange.observer
 import os
 import os.path
 import shutil
@@ -42,7 +42,7 @@ class TestMangle(unittest.TestCase):
 
     def callFUT(self, arg, argv=[]):
         return grap_stdout(
-            icemac.callonchange.mangle_call_args, arg, argv)
+            icemac.callonchange.observer.mangle_call_args, arg, argv)
 
     def test_no_args(self):
         stdout, result = self.callFUT([])
@@ -96,7 +96,7 @@ class TestObserver(unittest.TestCase):
         shutil.rmtree(self.basedir)
 
     def test_observer(self):
-        observer = icemac.callonchange.Observer(
+        observer = icemac.callonchange.observer.Observer(
             self.basedir, [self.createScript()])
         observer.start()
         os.mkdir(os.path.join(self.basedir, '1'))
@@ -112,7 +112,7 @@ class TestObserver(unittest.TestCase):
             orig_stdout = sys.stdout
             sys.stderr = StringIO.StringIO()
             sys.stdout = StringIO.StringIO()
-            observer = icemac.callonchange.Observer(
+            observer = icemac.callonchange.observer.Observer(
                 self.basedir, ['asdf'])
             observer.start()
             os.mkdir(os.path.join(self.basedir, '1'))
