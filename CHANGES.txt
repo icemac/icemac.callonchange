@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.2 (unreleased)
+0.2 (2010-07-04)
 ----------------
 
 - Added buildout recipe to ease integration with buildout projects. (See section `In buildout`_.)
