@@ -3,6 +3,7 @@
 # See also LICENSE.txt
 
 import fsevents
+import optparse
 import subprocess
 import sys
 import time
@@ -48,10 +49,24 @@ class Observer(object):
         self.observer.stop()
 
 
+
+
 def mangle_call_args(args, argv):
     "Combine buildout and sys.argv parameters into one list."
-    args = tuple(args) + tuple(argv)
-    if len(args) < 2:
+    call_args = list(tuple(args) + tuple(argv))
+
+    parser = optparse.OptionParser(
+        usage="%prog [options] path action [action options]")
+    parser.add_option(
+        "-e", action="append", dest="extensions", default=[],
+        help="only call action on changes of a file with this extension "\
+             "(option might be used multiple times)")
+    parser.disable_interspersed_args()
+
+    (options, parsed_args) = parser.parse_args(call_args)
+
+    if len(parsed_args) < 2:
         print USAGE
-        return None, None
-    return args[0], args[1:]
+        return None, None, None
+
+    return parsed_args[0], parsed_args[1:], options.extensions

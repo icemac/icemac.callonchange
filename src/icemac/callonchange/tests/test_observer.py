@@ -45,30 +45,62 @@ class TestMangle(unittest.TestCase):
             icemac.callonchange.observer.mangle_call_args, arg, argv)
 
     def test_no_args(self):
+        # With no arguments supplied, usage is shown.
         stdout, result = self.callFUT([])
-        self.assertEqual((None, None), result)
+        self.assertEqual((None, None, None), result)
         self.failUnless(stdout.startswith('USAGE'))
 
     def test_missing_params(self):
+        # With not enough arguments supplied, usage is shown.
         stdout, result = self.callFUT(['.'])
-        self.assertEqual((None, None), result)
+        self.assertEqual((None, None, None), result)
+        self.failUnless(stdout.startswith('USAGE'))
+
+    def test_only_extension(self):
+        # With only extensions supplied, usage is shown.
+        stdout, result = self.callFUT(['-e', 'py'])
+        self.assertEqual((None, None, None), result)
         self.failUnless(stdout.startswith('USAGE'))
 
     def test_no_additional_args(self):
+        # Without additional arguments the default arguments are used.
         stdout, result = self.callFUT(['.', 'bin/test'])
-        self.assertEqual(('.', ('bin/test', )), result)
+        self.assertEqual(('.', ['bin/test'], []), result)
         self.assertEqual(stdout, '')
 
     def test_additional_args(self):
+        # With additional arguments these are added to the default ones.
         stdout, result = self.callFUT(
             ['.', 'bin/test'], ['-t', 'TestMangle'])
-        self.assertEqual(('.', ('bin/test', '-t', 'TestMangle')), result)
+        self.assertEqual(('.', ['bin/test', '-t', 'TestMangle'], []), result)
         self.assertEqual(stdout, '')
 
     def test_only_additional_args(self):
+        # With only additional arguments supplied, they are used
+        # instead of the default ones.
         stdout, result = self.callFUT([], ['.', 'bin/test', '-v'])
-        self.assertEqual(('.', ('bin/test', '-v')), result)
+        self.assertEqual(('.', ['bin/test', '-v'], []), result)
         self.assertEqual(stdout, '')
+
+    def test_one_extension(self):
+        # With an extension supplied it is returned in the third
+        # parameter of the return value.
+        stdout, result = self.callFUT(['-e', 'py', '.', 'bin/test'])
+        self.assertEqual(('.', ['bin/test'], ['py']), result)
+        self.assertEqual(stdout, '')
+
+    def test_two_extensions(self):
+        # With more than one extension supplied they are returned in
+        # the third parameter of the return value.
+        stdout, result = self.callFUT(
+            ['-e', 'py', '-e', 'txt', '.', 'bin/test'])
+        self.assertEqual(('.', ['bin/test'], ['py', 'txt']), result)
+        self.assertEqual(stdout, '')
+
+    def test_more(self):
+        self.fail("""more tests:
+                      * wrong order of ext and param,
+                      * ext in additional params not accepted.""")
 
 
 class TestObserver(unittest.TestCase):
