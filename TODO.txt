@@ -1,9 +1,6 @@
 To do
 =====
 
-- Ease buildout integration by providing a buildout recipe with
-  default arguments.
-
 - icemac.callonchange is currently not useable in situations where the
   command changes something in the observed diretory. (e. g. LaTeX
   documents can't be created with it as the creation changes the
