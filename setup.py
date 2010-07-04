@@ -9,7 +9,7 @@ def read(*path_elements):
     return "\n\n" + file(os.path.join(*path_elements)).read()
 
 
-version = '0.2'
+version = '0.3dev'
 
 tests_require = ['zc.buildout',
                 ]
