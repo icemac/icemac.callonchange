@@ -41,22 +41,39 @@ directory enter::
   $ callonchange ~/Dowloads xeyes
 
 
-In Buildout
+In buildout
 -----------
 
-Installation
-~~~~~~~~~~~~
+There is a recipe in the package which eases installation using
+buildout.
+
+Installation with default arguments
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Add a section to your buildout to generate a script for
 icemac.callonchange (don't forget to add it to the parts!)::
 
   [coc]
-  recipe = zc.recipe.egg
-  eggs = icemac.callonchange
-  arguments = "src", "bin/test"
+  recipe = icemac.callonchange
 
-This creates a callonchange script for the src directory which calls
-``bin/test`` on each change in src or a subdirectory.
+This creates a callonchange script with default arguments. These are::
+
+  'src', 'bin/test', '-cv'
+
+Which means: observe the `src` directory and call ``bin/test`` with the arguments verbose and color on changes.
+
+Installation with customized arguments
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To override the default arguments add an `arguments` parameter to the
+buildout section::
+
+  [coc]
+  recipe = icemac.callonchange
+  arguments = 'Products', 'bin/ztest'
+
+This means: observe the `Products` directory and call ``bin/ztest`` on changes.
+
 
 Usage as buildout script
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -65,8 +82,15 @@ You can add additional parameters when you call the generated script::
 
   $ bin/callonchange -t testObserver
 
-This command line calls ``bin/test -t testObserver`` on each change in
-the src directory.
+When you use the default arguments in the buildout section, this
+command line calls ``bin/test -cv -t testObserver`` on each change in
+the `src` directory.
+
+Stopping icemac.callonchange
+----------------------------
+
+To stop a running icemac.callonchange instance hit ^C (Control-C).
+
 
 Run tests
 ---------
@@ -80,6 +104,15 @@ or use buildout::
   $ python bootstrap.py
   $ bin/buildout
   $ bin/test
+
+or use icemac.callonchange itself::
+
+  $ python bootstrap.py
+  $ bin/buildout
+  $ bin/callonchange
+
+In the last version you have to change something inside the `src`
+directory of the package so the observer lets the tests run.
 
 
 Thanks

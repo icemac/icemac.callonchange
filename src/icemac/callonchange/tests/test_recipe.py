@@ -14,5 +14,6 @@ def test_suite():
     return doctest.DocFileSuite(
         'recipe.txt',
         setUp=setUp,
-        tearDown=zc.buildout.testing.buildoutTearDown
+        tearDown=zc.buildout.testing.buildoutTearDown,
+        optionflags=doctest.ELLIPSIS
         )

@@ -4,6 +4,12 @@
 
 There is a recipe to ease buildout integration.
 
+Default configuration
+=====================
+
+In the default configuration the recipe name is sufficiant in the
+buildout section:
+
 >>> write(sample_buildout, 'buildout.cfg',
 ... """
 ... [buildout]
@@ -13,8 +19,62 @@ There is a recipe to ease buildout integration.
 ... recipe = icemac.callonchange
 ... """)
 
->>> import os
+After running buildout the script gets created in the `bin` directory:
+
+>>> import os, os.path
 >>> os.chdir(sample_buildout)
 >>> buildout = os.path.join(sample_buildout, 'bin', 'buildout')
 >>> print system(buildout),
 Installing coc.
+Generated script '/.../sample-buildout/bin/callonchange'.
+>>> ls('bin')
+-  buildout
+-  callonchange
+
+When the section does not contain arguments the default arguments
+(call bin/test in src directory with arguments verbose and color):
+
+>>> cat(os.path.join(sample_buildout, 'bin', 'callonchange'))
+#!...
+import icemac.callonchange.script
+<BLANKLINE>
+if __name__ == '__main__':
+    icemac.callonchange.script.callonchange('src', 'bin/test', '-cv')
+
+User defined arguments
+======================
+
+To override the default arguments the `arguments` parameter in the
+section has to be used:
+
+>>> write(sample_buildout, 'buildout.cfg',
+... """
+... [buildout]
+... parts = coc
+...
+... [coc]
+... recipe = icemac.callonchange
+... arguments = 'Products', 'bin/most-tests', '-vv'
+... """)
+
+After running buildout the script gets created in the `bin` directory:
+
+>>> import os, os.path
+>>> os.chdir(sample_buildout)
+>>> buildout = os.path.join(sample_buildout, 'bin', 'buildout')
+>>> print system(buildout),
+Uninstalling coc.
+Installing coc.
+Generated script '/.../sample-buildout/bin/callonchange'.
+>>> ls('bin')
+-  buildout
+-  callonchange
+
+The entry point is called with the entered arguments:
+
+>>> cat(os.path.join(sample_buildout, 'bin', 'callonchange'))
+#!...
+import icemac.callonchange.script
+<BLANKLINE>
+if __name__ == '__main__':
+    icemac.callonchange.script.callonchange('Products', 'bin/most-tests', '-vv')
