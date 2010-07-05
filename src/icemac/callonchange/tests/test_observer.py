@@ -97,10 +97,24 @@ class TestMangle(unittest.TestCase):
         self.assertEqual(('.', ['bin/test'], ['py', 'txt']), result)
         self.assertEqual(stdout, '')
 
-    def test_more(self):
-        self.fail("""more tests:
-                      * wrong order of ext and param,
-                      * ext in additional params not accepted.""")
+    def test_wrong_order_of_extension_an_parameter(self):
+        # The (optional) extensions must come before the positional
+        # arguments of path and callable.
+        stdout, result = self.callFUT(
+            ['.', '-e', 'py',  'bin/test'])
+        # Option specification becomes part of the callable.
+        self.assertEqual(('.', ['-e', 'py',  'bin/test'], []), result)
+        self.assertEqual(stdout, '')
+
+    def test_extension_in_additional_params_not_accepted(self):
+        # The extensions in the additional parameters are used as
+        # options of the callable not ay arguments of
+        # icemac.callonchange.
+        stdout, result = self.callFUT(
+            ['.', 'bin/test'], ['-e', 'py'])
+        # Option specification becomes part of the callable.
+        self.assertEqual(('.', ['bin/test', '-e', 'py'], []), result)
+        self.assertEqual(stdout, '')
 
 
 class TestObserver(unittest.TestCase):
@@ -128,31 +142,67 @@ class TestObserver(unittest.TestCase):
         shutil.rmtree(self.basedir)
 
     def test_observer(self):
+        # Assert that the script is called when something inside the
+        # observed directory changes.
         observer = icemac.callonchange.observer.Observer(
-            self.basedir, [self.createScript()])
-        observer.start()
-        os.mkdir(os.path.join(self.basedir, '1'))
-        time.sleep(1)
+            self.basedir, [self.createScript()], [])
         try:
+            observer.start()
+            os.mkdir(os.path.join(self.basedir, '1'))
+            time.sleep(1)
             self.assertEqual('script called',
                              file(os.path.join(self.basedir, 'result')).read())
         finally:
             observer.stop()
 
-    def test_not_existing_script(self):
+    def test_observer_not_called(self):
+        # Assert that the script is _not_ called when something
+        # outside the observed directory changes.
+        observe_dir = os.path.join(self.basedir, 'observe')
+        os.mkdir(observe_dir)
+        observer = icemac.callonchange.observer.Observer(
+            observe_dir, [self.createScript()], [])
         try:
-            orig_stdout = sys.stdout
-            sys.stderr = StringIO.StringIO()
-            sys.stdout = StringIO.StringIO()
-            observer = icemac.callonchange.observer.Observer(
-                self.basedir, ['asdf'])
             observer.start()
             os.mkdir(os.path.join(self.basedir, '1'))
             time.sleep(1)
-            self.assertEqual(
-                "OSError: (2, 'No such file or directory')\n"
-                "Popen params were:  ('asdf',)\n", sys.stdout.getvalue())
+            self.failIf(os.path.exists(os.path.join(self.basedir, 'result')))
         finally:
             observer.stop()
+
+
+    def test_not_existing_script(self):
+        # When the script does not exist, an error message is
+        # displayed.
+        orig_stdout = sys.stdout
+        try:
+            sys.stdout = StringIO.StringIO()
+            observer = icemac.callonchange.observer.Observer(
+                self.basedir, ['asdf'], [])
+            try:
+                observer.start()
+                os.mkdir(os.path.join(self.basedir, '1'))
+                time.sleep(1)
+                self.assertEqual(
+                    "OSError: (2, 'No such file or directory')\n"
+                    "Popen params were:  ('asdf',)\n", sys.stdout.getvalue())
+            finally:
+                observer.stop()
+        finally:
             sys.stdout = orig_stdout
 
+
+    def test_not_matching_extension(self):
+        # When the extension of the changed file inside the observed
+        # directory is not in the extenion list, script is not called
+        observer = icemac.callonchange.observer.Observer(
+            self.basedir, [self.createScript()], ['py'])
+        try:
+            observer.start()
+            my_file = file(os.path.join(self.basedir, 'one.pyc'), 'w')
+            my_file.write('asdf')
+            my_file.close()
+            time.sleep(1)
+            self.failIf(os.path.exists(os.path.join(self.basedir, 'result')))
+        finally:
+            observer.stop()

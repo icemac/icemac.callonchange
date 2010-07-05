@@ -10,7 +10,7 @@ import icemac.callonchange.observer
 def callonchange(*args):
     "Handler for entry point which can handle default and sys.argv parameters."
     # Combine function arguments which sys.argv arguments:
-    path, params = icemac.callonchange.observer.mangle_call_args(
+    path, params, extensions = icemac.callonchange.observer.mangle_call_args(
         args, sys.argv[1:])
     if path is None:
         # mangle_call_args obviously printed a usage message, so we

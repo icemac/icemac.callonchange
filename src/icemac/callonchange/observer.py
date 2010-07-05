@@ -32,9 +32,10 @@ def callbackFactory(*params):
 
 class Observer(object):
     "Observer for path."
-    def __init__(self, path, params):
+    def __init__(self, path, params, extensions):
         self.path = path
         self.params = params
+        self.extensions = extensions
 
     def start(self):
         # as told by MacFSEvents
@@ -47,8 +48,6 @@ class Observer(object):
     def stop(self):
         self.observer.unschedule(self.stream)
         self.observer.stop()
-
-
 
 
 def mangle_call_args(args, argv):
