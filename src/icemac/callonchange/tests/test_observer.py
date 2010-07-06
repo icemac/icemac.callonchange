@@ -131,9 +131,35 @@ class TestObserver(unittest.TestCase):
         file.write('#! /bin/bash\n')
         file.write('echo -n "script called" > "%s"\n' % os.path.join(
             self.basedir, 'result'))
+        file.flush()
+        os.fsync(file.fileno())
         file.close()
         os.chmod(filename, 0700)
         return filename
+
+    def writeFile(self, path, mode='w'):
+        my_file = file(path, mode)
+        # my_file.flush and os.fsync are not enough (on my MacBook
+        # Pro), so we write really big files hopefully beyond the
+        # cache size.
+        my_file.write(10000000*'asdf')
+        my_file.flush()
+        os.fsync(my_file.fileno())
+        my_file.close()
+
+    def assertScriptCalled(self):
+        "Assert that the script got called."
+        # Wait a bit as the events are processed in a differend thread.
+        time.sleep(1)
+        self.assertEqual('script called',
+                         file(os.path.join(self.basedir, 'result')).read())
+
+    def assertScriptNotCalled(self):
+        "Assert that the script got not called."
+        # Wait a bit as so the event can get propagated.
+        time.sleep(1)
+        self.failIf(os.path.exists(os.path.join(self.basedir, 'result')))
+
 
     def setUp(self):
         self.basedir = tempfile.mkdtemp()
@@ -141,7 +167,7 @@ class TestObserver(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(self.basedir)
 
-    def test_observer(self):
+    def test_dir_observer_called_on_changed_dir(self):
         # Assert that the script is called when something inside the
         # observed directory changes.
         observer = icemac.callonchange.observer.Observer(
@@ -149,13 +175,11 @@ class TestObserver(unittest.TestCase):
         try:
             observer.start()
             os.mkdir(os.path.join(self.basedir, '1'))
-            time.sleep(1)
-            self.assertEqual('script called',
-                             file(os.path.join(self.basedir, 'result')).read())
+            self.assertScriptCalled()
         finally:
             observer.stop()
 
-    def test_observer_not_called(self):
+    def test_dir_observer_not_called_on_outside_change(self):
         # Assert that the script is _not_ called when something
         # outside the observed directory changes.
         observe_dir = os.path.join(self.basedir, 'observe')
@@ -165,11 +189,9 @@ class TestObserver(unittest.TestCase):
         try:
             observer.start()
             os.mkdir(os.path.join(self.basedir, '1'))
-            time.sleep(1)
-            self.failIf(os.path.exists(os.path.join(self.basedir, 'result')))
+            self.assertScriptNotCalled()
         finally:
             observer.stop()
-
 
     def test_not_existing_script(self):
         # When the script does not exist, an error message is
@@ -191,18 +213,52 @@ class TestObserver(unittest.TestCase):
         finally:
             sys.stdout = orig_stdout
 
-
     def test_not_matching_extension(self):
         # When the extension of the changed file inside the observed
         # directory is not in the extenion list, script is not called
         observer = icemac.callonchange.observer.Observer(
-            self.basedir, [self.createScript()], ['py'])
+            self.basedir, [self.createScript()], ['.py'])
         try:
             observer.start()
-            my_file = file(os.path.join(self.basedir, 'one.pyc'), 'w')
-            my_file.write('asdf')
-            my_file.close()
-            time.sleep(1)
-            self.failIf(os.path.exists(os.path.join(self.basedir, 'result')))
+            path = os.path.join(self.basedir, 'one.pyc')
+            self.writeFile(path)
+            self.assertScriptNotCalled()
         finally:
             observer.stop()
+
+    def test_matching_extension_create(self):
+        # The script is called when the extension of the created file
+        # inside the observed directory is in the extenion list.
+        observer = icemac.callonchange.observer.Observer(
+            self.basedir, [self.createScript()], ['.py'])
+        try:
+            observer.start()
+            path = os.path.join(self.basedir, 'one.py')
+            self.writeFile(path)
+            self.assertScriptCalled()
+        finally:
+            observer.stop()
+
+    def test_matching_extension_modify(self):
+        # The script is also called when the extension of the changed
+        # file inside the observed directory is in the extenion list.
+        observer = icemac.callonchange.observer.Observer(
+            self.basedir, [self.createScript()], ['.py'])
+
+        # Create a file which gets modified when under observation.
+        path = os.path.join(self.basedir, 'one.py')
+        self.writeFile(path)
+        try:
+            observer.start()
+            self.writeFile(path, mode='w+a')
+            self.assertScriptCalled()
+        finally:
+            observer.stop()
+
+    def test_todo(self):
+        self.fail("""todo:
+                     * test not called when matching ext outside dir
+                     * unify extension dot handling (do not require it, but
+                       store only with dot)
+                     * better default args in recipe
+                     * write README for extensions.""")

@@ -2,8 +2,10 @@
 # Copyright (c) 2010 Michael Howitz
 # See also LICENSE.txt
 
+import atexit
 import fsevents
 import optparse
+import os.path
 import subprocess
 import sys
 import time
@@ -15,18 +17,39 @@ Calls <command> with <arg>s when <path> or something in it changes.
 <command> can be a binary or a script.
 """
 
+def run_subprocess(params):
+    "Run the given pramams in a subprocess."
+    try:
+        subprocess.Popen(params)
+    except OSError, e:
+        # On error it would be nice to have a hint why it failed:
+        print "OSError: %s" % (e.args,)
+        print "Popen params were: ",
+        print params
+        # Exit the observer on error.
+        sys.exit(-1)
 
-def callbackFactory(*params):
-    "Create callback function."
+
+
+def directoryCallbackFactory(*params):
+    "Create callback function for directory events."
     def callback(subpath, mask):
-        try:
-            subprocess.Popen(params)
-        except OSError, e:
-            # On error it would be nice to have a hint why it failed:
-            print "OSError: %s" % (e.args,)
-            print "Popen params were: ",
-            print params
-            sys.exit(-1)
+        # Subpath and mask of changes do not matter here. There is
+        # currently no way (and no desire) to handle them over to the
+        # subprocess.
+        run_subprocess(params)
+    return callback
+
+
+def fileCallbackFactory(extensions, *params):
+    "Create callback function for file events."
+    def callback(event):
+        # event.name contains the absolute path to the changed file
+        path, ext = os.path.splitext(event.name)
+        if ext in extensions:
+            # Only run process when extension of changed file is in
+            # the list of observed file types
+            run_subprocess(params)
     return callback
 
 
@@ -36,18 +59,29 @@ class Observer(object):
         self.path = path
         self.params = params
         self.extensions = extensions
+        self._is_running = False
 
     def start(self):
-        # as told by MacFSEvents
-        callback = callbackFactory(*self.params)
+        if self.extensions:
+            # observe explicit file extensions
+            callback = fileCallbackFactory(self.extensions, *self.params)
+        else:
+            # observe everything in the directory
+            callback = directoryCallbackFactory(*self.params)
         self.observer = fsevents.Observer()
         self.observer.start()
-        self.stream = fsevents.Stream(callback, self.path)
+        file_events = bool(self.extensions)
+        self.stream = fsevents.Stream(
+            callback, self.path, file_events=file_events)
         self.observer.schedule(self.stream)
+        self._is_running = True
+        atexit.register(self.stop)
 
     def stop(self):
-        self.observer.unschedule(self.stream)
-        self.observer.stop()
+        if self._is_running:
+            self.observer.unschedule(self.stream)
+            self.observer.stop()
+            self._is_running = False
 
 
 def mangle_call_args(args, argv):

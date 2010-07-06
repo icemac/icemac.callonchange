@@ -16,7 +16,7 @@ def callonchange(*args):
         # mangle_call_args obviously printed a usage message, so we
         # can quit here.
         return
-    observer = icemac.callonchange.observer.Observer(path, params)
+    observer = icemac.callonchange.observer.Observer(path, params, extensions)
     observer.start()
     try:
         while True:

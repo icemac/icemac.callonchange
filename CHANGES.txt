@@ -4,7 +4,7 @@ Changelog
 0.3 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Added abbility to specify file extensions to be observed.
 
 
 0.2 (2010-07-04)
