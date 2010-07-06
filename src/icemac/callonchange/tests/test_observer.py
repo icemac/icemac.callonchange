@@ -119,13 +119,8 @@ class TestMangle(unittest.TestCase):
 
 class TestObserver(unittest.TestCase):
 
-    def createScript(self, dir=None):
-        if dir is None:
-            path = self.basedir
-        else:
-            path = os.path.join(self.basedir, dir)
-            if not os.path.exists(path):
-                os.mkdir(path)
+    def createScript(self):
+        path = self.basedir
         filename = os.path.join(path, 'script')
         file = open(filename, 'w')
         file.write('#! /bin/bash\n')
