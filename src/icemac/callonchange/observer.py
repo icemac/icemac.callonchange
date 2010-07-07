@@ -11,12 +11,6 @@ import sys
 import time
 
 
-USAGE = """\
-USAGE: callonchange <path> <command> [<arg1> <arg2> ...]
-Calls <command> with <arg>s when <path> or something in it changes.
-<command> can be a binary or a script.
-"""
-
 def run_subprocess(params):
     "Run the given pramams in a subprocess."
     try:
@@ -89,17 +83,31 @@ def mangle_call_args(args, argv):
     call_args = list(tuple(args) + tuple(argv))
 
     parser = optparse.OptionParser(
-        usage="%prog [options] path action [action options]")
+        usage="%prog [options] path utility [utility arguments]", epilog='')
+    parser.description = (
+        "%prog invokes <utility> with its <utility arguments> when <path> or "
+        "something in it changes.")
     parser.add_option(
-        "-e", action="append", dest="extensions", default=[],
-        help="only call action on changes of a file with this extension "\
+        "-e", action="append", dest="extension", default=[],
+        help="only call utility on changes of a file with this extension "\
              "(option might be used multiple times)")
     parser.disable_interspersed_args()
 
     (options, parsed_args) = parser.parse_args(call_args)
 
+    # At least path and action are required, otherwise we print a
+    # helpful message.
     if len(parsed_args) < 2:
-        print USAGE
+        parser.print_help()
         return None, None, None
 
-    return parsed_args[0], parsed_args[1:], options.extensions
+    # For convinience it is allowed to omit the leading dots in of the
+    # specified extension, so they get added here, as they are needed
+    # by the observer.
+    extensions = []
+    for ext in options.extension:
+        if not ext.startswith('.'):
+            ext = '.' + ext
+        extensions.append(ext)
+
+    return parsed_args[0], parsed_args[1:], extensions

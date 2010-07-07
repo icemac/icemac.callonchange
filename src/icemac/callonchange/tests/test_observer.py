@@ -48,19 +48,19 @@ class TestMangle(unittest.TestCase):
         # With no arguments supplied, usage is shown.
         stdout, result = self.callFUT([])
         self.assertEqual((None, None, None), result)
-        self.failUnless(stdout.startswith('USAGE'))
+        self.failUnless(stdout.startswith('Usage:'))
 
     def test_missing_params(self):
         # With not enough arguments supplied, usage is shown.
         stdout, result = self.callFUT(['.'])
         self.assertEqual((None, None, None), result)
-        self.failUnless(stdout.startswith('USAGE'))
+        self.failUnless(stdout.startswith('Usage:'))
 
     def test_only_extension(self):
         # With only extensions supplied, usage is shown.
-        stdout, result = self.callFUT(['-e', 'py'])
+        stdout, result = self.callFUT(['-e', '.py'])
         self.assertEqual((None, None, None), result)
-        self.failUnless(stdout.startswith('USAGE'))
+        self.failUnless(stdout.startswith('Usage:'))
 
     def test_no_additional_args(self):
         # Without additional arguments the default arguments are used.
@@ -85,25 +85,25 @@ class TestMangle(unittest.TestCase):
     def test_one_extension(self):
         # With an extension supplied it is returned in the third
         # parameter of the return value.
-        stdout, result = self.callFUT(['-e', 'py', '.', 'bin/test'])
-        self.assertEqual(('.', ['bin/test'], ['py']), result)
+        stdout, result = self.callFUT(['-e', '.py', '.', 'bin/test'])
+        self.assertEqual(('.', ['bin/test'], ['.py']), result)
         self.assertEqual(stdout, '')
 
     def test_two_extensions(self):
         # With more than one extension supplied they are returned in
         # the third parameter of the return value.
         stdout, result = self.callFUT(
-            ['-e', 'py', '-e', 'txt', '.', 'bin/test'])
-        self.assertEqual(('.', ['bin/test'], ['py', 'txt']), result)
+            ['-e', '.py', '-e', '.txt', '.', 'bin/test'])
+        self.assertEqual(('.', ['bin/test'], ['.py', '.txt']), result)
         self.assertEqual(stdout, '')
 
     def test_wrong_order_of_extension_an_parameter(self):
         # The (optional) extensions must come before the positional
         # arguments of path and callable.
         stdout, result = self.callFUT(
-            ['.', '-e', 'py',  'bin/test'])
+            ['.', '-e', '.py',  'bin/test'])
         # Option specification becomes part of the callable.
-        self.assertEqual(('.', ['-e', 'py',  'bin/test'], []), result)
+        self.assertEqual(('.', ['-e', '.py',  'bin/test'], []), result)
         self.assertEqual(stdout, '')
 
     def test_extension_in_additional_params_not_accepted(self):
@@ -111,9 +111,19 @@ class TestMangle(unittest.TestCase):
         # options of the callable not ay arguments of
         # icemac.callonchange.
         stdout, result = self.callFUT(
-            ['.', 'bin/test'], ['-e', 'py'])
+            ['.', 'bin/test'], ['-e', '.py'])
         # Option specification becomes part of the callable.
-        self.assertEqual(('.', ['bin/test', '-e', 'py'], []), result)
+        self.assertEqual(('.', ['bin/test', '-e', '.py'], []), result)
+        self.assertEqual(stdout, '')
+
+    def test_extension_without_dot_gets_dot_added(self):
+        # When the extension is specified without the leading dot it
+        # gets added.
+        stdout, result = self.callFUT(
+            ['-e', 'py', '.', 'bin/test'])
+        # In the result the extension list contains the extension
+        # including a leading dot. This is for convinience.
+        self.assertEqual(('.', ['bin/test'], ['.py']), result)
         self.assertEqual(stdout, '')
 
 
@@ -134,9 +144,9 @@ class TestObserver(unittest.TestCase):
 
     def writeFile(self, path, mode='w'):
         my_file = file(path, mode)
-        # my_file.flush and os.fsync are not enough (on my MacBook
-        # Pro), so we write really big files hopefully beyond the
-        # cache size.
+        # my_file.flush and os.fsync are not enough (at least on my
+        # MacBook Pro), so I write really big files hopefully beyond
+        # the cache size.
         my_file.write(10000000*'asdf')
         my_file.flush()
         os.fsync(my_file.fileno())
@@ -250,10 +260,23 @@ class TestObserver(unittest.TestCase):
         finally:
             observer.stop()
 
+    def test_matching_extension_but_outside_observed_dir(self):
+        # When a file outside the observed dir changes the script does
+        # not get called.
+        observe_dir = os.path.join(self.basedir, 'observe')
+        os.mkdir(observe_dir)
+        observer = icemac.callonchange.observer.Observer(
+            observe_dir, [self.createScript()], ['.py'])
+        try:
+            observer.start()
+            path = os.path.join(self.basedir, 'one.py')
+            self.writeFile(path)
+            self.assertScriptNotCalled()
+        finally:
+            observer.stop()
+
+
     def test_todo(self):
         self.fail("""todo:
-                     * test not called when matching ext outside dir
-                     * unify extension dot handling (do not require it, but
-                       store only with dot)
                      * better default args in recipe
                      * write README for extensions.""")
