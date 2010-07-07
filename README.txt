@@ -70,9 +70,12 @@ buildout section::
 
   [coc]
   recipe = icemac.callonchange
+  name = coc
   arguments = 'Products', 'bin/ztest'
 
-This means: observe the `Products` directory and call ``bin/ztest`` on changes.
+This means: The created script will be named `coc`. When called it
+will observe the `Products` directory and call ``bin/ztest`` on
+changes.
 
 
 Usage as buildout script

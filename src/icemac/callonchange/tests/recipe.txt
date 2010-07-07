@@ -78,3 +78,32 @@ import icemac.callonchange.script
 <BLANKLINE>
 if __name__ == '__main__':
     icemac.callonchange.script.callonchange('Products', 'bin/most-tests', '-vv')
+
+User defined script name
+========================
+
+There is a `name` option in the recipe which defines an alternative
+name for the generated script:
+
+>>> write(sample_buildout, 'buildout.cfg',
+... """
+... [buildout]
+... parts = coc
+...
+... [coc]
+... recipe = icemac.callonchange
+... name = coc
+... """)
+
+After running buildout the script gets created in the `bin` directory:
+
+>>> import os, os.path
+>>> os.chdir(sample_buildout)
+>>> buildout = os.path.join(sample_buildout, 'bin', 'buildout')
+>>> print system(buildout),
+Uninstalling coc.
+Installing coc.
+Generated script '/.../sample-buildout/bin/coc'.
+>>> ls('bin')
+-  buildout
+-  coc

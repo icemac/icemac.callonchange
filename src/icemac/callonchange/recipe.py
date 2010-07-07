@@ -20,6 +20,8 @@ class Recipe(object):
         self.index = buildout['buildout'].get('index')
         self.newest = buildout['buildout'].get('newest') == 'true'
         self.arguments = self.options.get('arguments', DEFAULT_ARGUMENTS)
+        name = self.options.get('name', 'callonchange')
+        self.scripts = {'callonchange': name}
 
     def install(self):
         distributions = ['icemac.callonchange']
@@ -36,6 +38,7 @@ class Recipe(object):
             ws,
             self.executable,
             self.bin_directory,
+            scripts=self.scripts,
             arguments=self.arguments,
             )
 
