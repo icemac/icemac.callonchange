@@ -274,9 +274,3 @@ class TestObserver(unittest.TestCase):
             self.assertScriptNotCalled()
         finally:
             observer.stop()
-
-
-    def test_todo(self):
-        self.fail("""todo:
-                     * better default args in recipe
-                     * write README for extensions.""")
