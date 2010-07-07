@@ -10,60 +10,83 @@ Requirements
 ============
 
 * Mac OS X 10.5+ (Leopard)
+* Python 2.5
 
-Usage
-=====
+General usage
+=============
 
-icemac.callonchange can be used as standalone script and in buildout.
+Usage: callonchange [options] path utility [utility arguments]
+
+coc invokes *utility* with its *utility arguments* when *path* or
+something in it changes.
+
+Options:
+  -h, --help    show this help message and exit
+  -e EXTENSION  only call utility on changes of a file with this extension
+                (option might be used multiple times)
+
+EXTENSION might be specified with or without leading dot:
+
+  ``-e .py`` is equal to ``-e py``
+
+**Caution:** optional arguments must be specified *before* the
+positional arguments (path and utility). Arguments specified after the
+positional arguments are taken as arguments of the utility.
+
 
 Usage as script
----------------
+===============
 
 Installation
-~~~~~~~~~~~~
+------------
 
-To install icemac.callonchange as script call::
+To install callonchange as script call::
 
   $ python setup.py install
 
 or install it using a package manager like easy_install or pip.
 
 Call as script
-~~~~~~~~~~~~~~
+--------------
 
 To call it as a script add the path to the directory to be observed
 and the command (script or program) to be called when the directory or
 something in it has changed.
 
-Example to call ``xeyes`` when something changed in the Downloads
-directory enter::
+Example to call ``xeyes`` when a file with the extension `log` has
+changed in `/var/log` enter::
 
-  $ callonchange ~/Dowloads xeyes
+  $ callonchange -e log /var/log xeyes
+
+**Caution:** In this example `xeyes` is called on every new entry in
+the log file.
 
 
 In buildout
------------
+===========
 
 There is a recipe in the package which eases installation using
 buildout.
 
 Installation with default arguments
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------------
 
-Add a section to your buildout to generate a script for
-icemac.callonchange (don't forget to add it to the parts!)::
+Add a section to your buildout to generate a script for callonchange
+(don't forget to add it to the parts!)::
 
   [coc]
   recipe = icemac.callonchange
 
 This creates a callonchange script with default arguments. These are::
 
-  'src', 'bin/test', '-cv'
+  '-e', 'py', '-e', 'zcml', '-e', 'pt', '-e', 'txt', 'src', 'bin/test', '-cv'
 
-Which means: observe the `src` directory and call ``bin/test`` with the arguments verbose and color on changes.
+Which means: observe in the `src` directory files with the extensions
+py, zcml, pt and txt. Call ``bin/test`` with the arguments cv (verbose
+and color) on changes.
 
 Installation with customized arguments
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------------
 
 To override the default arguments add an `arguments` parameter to the
 buildout section::
@@ -79,24 +102,24 @@ changes.
 
 
 Usage as buildout script
-~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------
 
 You can add additional parameters when you call the generated script::
 
   $ bin/callonchange -t testObserver
 
 When you use the default arguments in the buildout section, this
-command line calls ``bin/test -cv -t testObserver`` on each change in
-the `src` directory.
+command line calls ``bin/test -cv -t testObserver`` on each change of
+py, zcml, pt or txt files in the `src` directory.
 
-Stopping icemac.callonchange
-----------------------------
+Stopping callonchange
+=====================
 
-To stop a running icemac.callonchange instance hit ^C (Control-C).
+To stop a running callonchange instance hit ^C (Control-C).
 
 
-Run tests
----------
+Runing the tests
+================
 
 To run the tests of icemac.callonchange call::
 
@@ -108,7 +131,7 @@ or use buildout::
   $ bin/buildout
   $ bin/test
 
-or use icemac.callonchange itself::
+or use callonchange itself::
 
   $ python bootstrap.py
   $ bin/buildout

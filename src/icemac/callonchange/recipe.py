@@ -5,7 +5,8 @@
 import zc.buildout.easy_install
 
 
-DEFAULT_ARGUMENTS = "'src', 'bin/test', '-cv'"
+DEFAULT_CMD_LINE = "-e py -e zcml -e pt -e txt src bin/test -cv"
+DEFAULT_ARGUMENTS = "'" + "', '".join(DEFAULT_CMD_LINE.split()) + "'"
 
 
 class Recipe(object):

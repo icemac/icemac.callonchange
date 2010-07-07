@@ -4,7 +4,8 @@ Changelog
 0.3 (unreleased)
 ----------------
 
-- Added abbility to specify file extensions to be observed.
+- Added abbility to specify file extensions so only files with these
+  extensions will be observed.
 
 - Added a `name` parameter to the recipe to control the name of the
   generated script, e. g. allowing more than one icemac.callonchange

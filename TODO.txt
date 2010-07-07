@@ -1,10 +1,6 @@
-To do
+Ideas
 =====
 
-- icemac.callonchange is currently not useable in situations where the
-  command changes something in the observed diretory. (e. g. LaTeX
-  documents can't be created with it as the creation changes the
-  observed diretory which starts creation ... over and over again.
-  (Need an ability to select file extension(s) for which the command
-  should be run.)
-
+- It would be nice to have predefined argument lines even when not
+  using buildout. They could be stored in the home directory of the
+  user.
