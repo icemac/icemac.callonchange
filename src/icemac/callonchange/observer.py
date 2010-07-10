@@ -83,7 +83,7 @@ def mangle_call_args(args, argv):
     call_args = list(tuple(args) + tuple(argv))
 
     parser = optparse.OptionParser(
-        usage="%prog [options] path utility [utility arguments]", epilog='')
+        usage="%prog [options] path utility [utility arguments]")
     parser.description = (
         "%prog invokes <utility> with its <utility arguments> when <path> or "
         "something in it changes.")
