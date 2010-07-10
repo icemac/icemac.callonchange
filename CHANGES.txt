@@ -4,7 +4,7 @@ Changelog
 0.4 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Fixed incorrect handling of the `find-links` buildout parameter.
 
 
 0.3 (2010-07-07)

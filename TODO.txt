@@ -1,6 +1,9 @@
 Ideas
 =====
 
-- It would be nice to have predefined argument lines even when not
-  using buildout. They could be stored in the home directory of the
-  user.
+- It would be nice to have predefined argument lines (profiles) even
+  when not using buildout. They could be stored in the home directory
+  of the user. (Should support profiles which reverence other
+  profiles.)
+
+- In buildout recipe: default script name should be section name.

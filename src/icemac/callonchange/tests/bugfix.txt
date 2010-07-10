@@ -1,0 +1,29 @@
+=============================
+ Bugfixes in buildout recipe
+=============================
+
+There were some bugs in the recipe.
+
+Find-links not correctly parsed
+===============================
+
+When the buildout has a find-links parameter, error messages were displayed. This is now fixed:
+
+>>> write(sample_buildout, 'buildout.cfg',
+... """
+... [buildout]
+... parts = coc
+... find-links = %s
+...
+... [coc]
+... recipe = icemac.callonchange
+... """ % sample_buildout)
+
+After running buildout the script gets created in the `bin` directory:
+
+>>> import os, os.path
+>>> os.chdir(sample_buildout)
+>>> buildout = os.path.join(sample_buildout, 'bin', 'buildout')
+>>> print system(buildout),
+Installing coc.
+Generated script '/.../sample-buildout/bin/callonchange'.

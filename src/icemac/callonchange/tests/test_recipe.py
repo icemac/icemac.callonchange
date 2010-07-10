@@ -12,6 +12,7 @@ def setUp(test):
 
 def test_suite():
     return doctest.DocFileSuite(
+        'bugfix.txt',
         'recipe.txt',
         setUp=setUp,
         tearDown=zc.buildout.testing.buildoutTearDown,

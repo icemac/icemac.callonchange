@@ -17,7 +17,10 @@ class Recipe(object):
         self.bin_directory = buildout['buildout']['bin-directory']
         self.eggs_directory = buildout['buildout']['eggs-directory']
         self.develop_eggs_directory = buildout['buildout']['develop-eggs-directory']
-        self.links = buildout['buildout'].get('find-links', ())
+        links = buildout['buildout'].get('find-links', ())
+        if links:
+            links = links.split()
+        self.links = links
         self.index = buildout['buildout'].get('index')
         self.newest = buildout['buildout'].get('newest') == 'true'
         self.arguments = self.options.get('arguments', DEFAULT_ARGUMENTS)
