@@ -147,5 +147,13 @@ Thanks
 Thanks to Malte Borch for the great MacFSEvents_ which
 icemac.callonchange is based on.
 
-
 .. _MacFSEvents: http://pypi.python.org/pypi/MacFSEvents
+
+Similar tools
+=============
+
+* pest_: Seems to be designed to tun tests and nothing else. Has growl
+  integration. Version 1.0 has no tests.
+
+.. _pest: http://pypi.python.org/pypi/pest
+

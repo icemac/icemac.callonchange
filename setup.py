@@ -40,7 +40,8 @@ setuptools.setup(
         'Topic :: Utilities',
         ],
     keywords=(
-        'mac os event fs filesystem call command tdd test driven development'),
+        'mac os event fs filesystem call change command tdd '
+        'test driven development'),
     author='Michael Howitz',
     author_email='icemac@gmx.net',
     url='http://pypi.python.org/icemac.callonchange',
