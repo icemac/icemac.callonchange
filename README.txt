@@ -152,8 +152,15 @@ icemac.callonchange is based on.
 Similar tools
 =============
 
-* pest_: Seems to be designed to tun tests and nothing else. Has growl
-  integration. Version 1.0 has no tests.
+* pest_: "Auto tester for python" Seems to be designed to run tests
+  and nothing else. Has growl integration. Current version (1.0.2) has
+  no automatic tests.
+
+* sniffer_: "An automatic test runner. Supports nose out of the box."
+  Supports Linux, Windows and Mac OS X. But in current version (0.1.1)
+  Windows and Mac OS X are untested. Current version has no automatic
+  tests.
+
 
 .. _pest: http://pypi.python.org/pypi/pest
-
+.. _sniffer: http://pypi.python.org/pypi/sniffer

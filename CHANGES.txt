@@ -4,7 +4,7 @@ Changelog
 0.3.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Added list of similar tools.
 
 
 0.3.1 (2010-07-10)
