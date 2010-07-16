@@ -25,7 +25,7 @@ def run_subprocess(quite, params):
         sys.exit(-1)
 
 
-def directoryCallbackFactory(quite, exit_on_error, *params):
+def directoryCallbackFactory(quite, *params):
     "Create callback function for directory events."
     def callback(subpath, mask):
         # Subpath and mask of changes do not matter here. There is
@@ -36,17 +36,12 @@ def directoryCallbackFactory(quite, exit_on_error, *params):
         try:
             run_subprocess(quite, params)
         except SystemExit:
-            if exit_on_error:
-                # exit callonchange
-                thread.interrupt_main()
-            else:
-                # Only exit thread, as otherwise testrunner will be
-                # exited, too.
-                raise
+            # Signal the process to exit as we are in a thread here.
+            thread.interrupt_main()
     return callback
 
 
-def fileCallbackFactory(extensions, quite, exit_on_error, *params):
+def fileCallbackFactory(extensions, quite, *params):
     "Create callback function for file events."
     def callback(event):
         # event.name contains the absolute path to the changed file
@@ -59,13 +54,8 @@ def fileCallbackFactory(extensions, quite, exit_on_error, *params):
             try:
                 run_subprocess(quite, params)
             except SystemExit:
-                if exit_on_error:
-                    # exit callonchange
-                    thread.interrupt_main()
-                else:
-                    # Only exit thread, as otherwise testrunner will
-                    # be exited, too.
-                    raise
+                # We are in a thread here, so signal the main thread to exit.
+                thread.interrupt_main()
     return callback
 
 
@@ -74,7 +64,6 @@ class Observer(object):
 
     extensions = [] # only call utility when a file with this ext changed
     quite = False # when True, do not print any non-error output
-    exit_on_error = True # when True, exit on error otherwise only exit thread
 
     def __init__(self, path, params, **options):
         self.path = path
@@ -87,11 +76,10 @@ class Observer(object):
         if self.extensions:
             # observe explicit file extensions
             callback = fileCallbackFactory(
-                self.extensions, self.quite, self.exit_on_error, *self.params)
+                self.extensions, self.quite, *self.params)
         else:
             # observe everything in the directory
-            callback = directoryCallbackFactory(
-                self.quite, self.exit_on_error, *self.params)
+            callback = directoryCallbackFactory(self.quite, *self.params)
         self.observer = fsevents.Observer()
         self.observer.start()
         file_events = bool(self.extensions)

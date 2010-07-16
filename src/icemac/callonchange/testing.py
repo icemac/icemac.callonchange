@@ -63,7 +63,7 @@ class ObserverTestBase(unittest.TestCase):
         # Create the observer but make sure it does not exit on error
         # as this will exit the test runner, too.
         return icemac.callonchange.observer.Observer(
-            dir, [script], quite=quite, exit_on_error=False, **kw)
+            dir, [script], quite=quite, **kw)
 
     def assertScriptCalled(self):
         "Assert that the script got called."

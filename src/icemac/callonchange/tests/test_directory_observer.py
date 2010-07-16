@@ -25,8 +25,15 @@ class TestDirectoryObserver(icemac.callonchange.testing.ObserverTestBase):
             observer.start()
             os.mkdir(os.path.join(self.basedir, '1'))
             time.sleep(1)
+        except KeyboardInterrupt:
+            # When an OSError occurres during script call a
+            # KeyboardInterrupt is raised to stop the whole
+            # process. But this is the test which should not get
+            # stopped.
+            pass
         finally:
             observer.stop()
+
 
     def test_observer_called_on_changed_dir(self):
         # Assert that the script is called when something inside the
