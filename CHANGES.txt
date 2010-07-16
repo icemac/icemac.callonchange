@@ -4,7 +4,11 @@ Changelog
 0.3.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- When the utility gets called a messge is displayed. This can be
+  omitted by specifying the `-q` option for callonchange.
+
+- When the utility is not found or another OSError occurred when
+  calling the utility callonchange is now stopped.
 
 
 0.3.2 (2010-07-14)

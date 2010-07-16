@@ -7,3 +7,8 @@ Ideas
   profiles.)
 
 - In buildout recipe: default script name should be section name.
+
+- A minimal time between calls might be nice, so a change does not
+  result in a call when it occurred during this time.
+
+- The options of callonchange should have long variants, too.

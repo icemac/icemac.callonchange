@@ -24,10 +24,13 @@ Options:
   -h, --help    show this help message and exit
   -e EXTENSION  only call utility on changes of a file with this extension
                 (option might be used multiple times)
+  -q            Do not display any output of callonchange. (Still displays the
+                output of the utility.)
 
-EXTENSION might be specified with or without leading dot:
 
-  ``-e .py`` is equal to ``-e py``
+*EXTENSION* might be specified with or without a leading dot:
+
+  ``-e .py`` is equal to ``-e py`` is equal to ``-epy``
 
 **Caution:** optional arguments must be specified *before* the
 positional arguments (path and utility). Arguments specified after the
@@ -153,11 +156,11 @@ Similar tools
 =============
 
 * pest_: "Auto tester for python" Seems to be designed to run tests
-  and nothing else. Has growl integration. Current version (1.0.2) has
+  and nothing else. Has growl integration. Current version (1.0.3) has
   no automatic tests.
 
 * sniffer_: "An automatic test runner. Supports nose out of the box."
-  Supports Linux, Windows and Mac OS X. But in current version (0.1.1)
+  Supports Linux, Windows and Mac OS X. But in current version (0.1.3)
   Windows and Mac OS X are untested. Current version has no automatic
   tests.
 

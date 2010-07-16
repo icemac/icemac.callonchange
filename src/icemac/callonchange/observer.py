@@ -9,33 +9,44 @@ import os.path
 import subprocess
 import sys
 import time
+import thread
 
 
-def run_subprocess(params):
+def run_subprocess(quite, params):
     "Run the given pramams in a subprocess."
     try:
         subprocess.Popen(params)
     except OSError, e:
         # On error it would be nice to have a hint why it failed:
-        print "OSError: %s" % (e.args,)
-        print "Popen params were: ",
-        print params
+        print "OSError: [Errno %s] %s" % e.args
+        if  quite:
+            print "Parameters were: %s" % " ".join(params)
         # Exit the observer on error.
         sys.exit(-1)
 
 
-
-def directoryCallbackFactory(*params):
+def directoryCallbackFactory(quite, exit_on_error, *params):
     "Create callback function for directory events."
     def callback(subpath, mask):
         # Subpath and mask of changes do not matter here. There is
         # currently no way (and no desire) to handle them over to the
         # subprocess.
-        run_subprocess(params)
+        if not quite:
+            print "Calling: %s" % " ".join(params)
+        try:
+            run_subprocess(quite, params)
+        except SystemExit:
+            if exit_on_error:
+                # exit callonchange
+                thread.interrupt_main()
+            else:
+                # Only exit thread, as otherwise testrunner will be
+                # exited, too.
+                raise
     return callback
 
 
-def fileCallbackFactory(extensions, *params):
+def fileCallbackFactory(extensions, quite, exit_on_error, *params):
     "Create callback function for file events."
     def callback(event):
         # event.name contains the absolute path to the changed file
@@ -43,25 +54,44 @@ def fileCallbackFactory(extensions, *params):
         if ext in extensions:
             # Only run process when extension of changed file is in
             # the list of observed file types
-            run_subprocess(params)
+            if not quite:
+                print "Calling: %s" % " ".join(params)
+            try:
+                run_subprocess(quite, params)
+            except SystemExit:
+                if exit_on_error:
+                    # exit callonchange
+                    thread.interrupt_main()
+                else:
+                    # Only exit thread, as otherwise testrunner will
+                    # be exited, too.
+                    raise
     return callback
 
 
 class Observer(object):
     "Observer for path."
-    def __init__(self, path, params, extensions):
+
+    extensions = [] # only call utility when a file with this ext changed
+    quite = False # when True, do not print any non-error output
+    exit_on_error = True # when True, exit on error otherwise only exit thread
+
+    def __init__(self, path, params, **options):
         self.path = path
         self.params = params
-        self.extensions = extensions
         self._is_running = False
+        for key, value in options.items():
+            setattr(self, key, value)
 
     def start(self):
         if self.extensions:
             # observe explicit file extensions
-            callback = fileCallbackFactory(self.extensions, *self.params)
+            callback = fileCallbackFactory(
+                self.extensions, self.quite, self.exit_on_error, *self.params)
         else:
             # observe everything in the directory
-            callback = directoryCallbackFactory(*self.params)
+            callback = directoryCallbackFactory(
+                self.quite, self.exit_on_error, *self.params)
         self.observer = fsevents.Observer()
         self.observer.start()
         file_events = bool(self.extensions)
@@ -88,9 +118,15 @@ def mangle_call_args(args, argv):
         "%prog invokes <utility> with its <utility arguments> when <path> or "
         "something in it changes.")
     parser.add_option(
-        "-e", action="append", dest="extension", default=[],
+        "-e", action="append", metavar="EXTENSION", dest="extensions",
+        default=[],
         help="only call utility on changes of a file with this extension "\
              "(option might be used multiple times)")
+    parser.add_option(
+        "-q", action="store_true", dest="quite", default=False,
+        help=(
+            "Do not display any output of callonchange. "
+            "(Still displays the output of the utility.)"))
     parser.disable_interspersed_args()
 
     (options, parsed_args) = parser.parse_args(call_args)
@@ -105,9 +141,10 @@ def mangle_call_args(args, argv):
     # specified extension, so they get added here, as they are needed
     # by the observer.
     extensions = []
-    for ext in options.extension:
+    for ext in options.extensions:
         if not ext.startswith('.'):
             ext = '.' + ext
         extensions.append(ext)
+    options.extensions = extensions
 
-    return parsed_args[0], parsed_args[1:], extensions
+    return parsed_args[0], parsed_args[1:], options.__dict__
