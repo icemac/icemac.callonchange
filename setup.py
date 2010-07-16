@@ -55,7 +55,7 @@ setuptools.setup(
         'MacFSEvents',
         'setuptools',
         ],
-    extras_require = dict(
+    extras_require=dict(
         test=tests_require),
     entry_points="""
       [console_scripts]
