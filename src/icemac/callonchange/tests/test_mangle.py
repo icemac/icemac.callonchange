@@ -2,15 +2,8 @@
 # Copyright (c) 2010 Michael Howitz
 # See also LICENSE.txt
 
-import StringIO
 import icemac.callonchange.observer
 import icemac.callonchange.testing
-import os
-import os.path
-import shutil
-import sys
-import tempfile
-import time
 import unittest
 
 

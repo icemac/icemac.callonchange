@@ -10,7 +10,6 @@ import pkg_resources
 import subprocess
 import sys
 import thread
-import time
 
 
 def run_subprocess(quite, params):
