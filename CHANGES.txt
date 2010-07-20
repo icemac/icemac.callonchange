@@ -4,7 +4,7 @@ Changelog
 0.4.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Added `--version` option to callonchange.
 
 
 0.4.0 (2010-07-16)

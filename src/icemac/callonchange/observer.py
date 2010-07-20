@@ -6,10 +6,11 @@ import atexit
 import fsevents
 import optparse
 import os.path
+import pkg_resources
 import subprocess
 import sys
-import time
 import thread
+import time
 
 
 def run_subprocess(quite, params):
@@ -101,7 +102,8 @@ def mangle_call_args(args, argv):
     call_args = list(tuple(args) + tuple(argv))
 
     parser = optparse.OptionParser(
-        usage="%prog [options] path utility [utility arguments]")
+        usage="%prog [options] path utility [utility arguments]",
+        version=pkg_resources.get_distribution('icemac.callonchange').version)
     parser.description = (
         "%prog invokes <utility> with its <utility arguments> when <path> or "
         "something in it changes.")

@@ -17,10 +17,11 @@ General usage
 
 Usage: callonchange [options] path utility [utility arguments]
 
-coc invokes *utility* with its *utility arguments* when *path* or
-something in it changes.
+callonchange invokes *utility* with its *utility arguments* when
+*path* or something in it changes.
 
 Options:
+  --version     show program's version number and exit
   -h, --help    show this help message and exit
   -e EXTENSION  only call utility on changes of a file with this extension
                 (option might be used multiple times)
