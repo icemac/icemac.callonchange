@@ -165,6 +165,12 @@ Similar tools
   Windows and Mac OS X are untested. Current version has no automatic
   tests.
 
+* autonose_: "continuous test tracker / runner for nosetests" Seems to
+  focus on nose tests. Version 0.1.3 only acts on changes of python
+  files. Detects file changes not using file system events. So it is
+  slow on lager code bases.
+
 
 .. _pest: http://pypi.python.org/pypi/pest
 .. _sniffer: http://pypi.python.org/pypi/sniffer
+.. _autonose: http://pypi.python.org/pypi/autonose

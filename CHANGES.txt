@@ -1,14 +1,16 @@
 Changelog
 =========
 
-0.4.1 (unreleased)
-------------------
+0.5 (2010-07-21)
+----------------
 
 - Added `--version` option to callonchange.
 
+- Added another similar tool to the list.
 
-0.4.0 (2010-07-16)
-------------------
+
+0.4 (2010-07-16)
+----------------
 
 - When the utility gets called a messge is displayed. This can be
   omitted by specifying the `-q` option for callonchange.
