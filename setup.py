@@ -25,7 +25,7 @@ setuptools.setup(
         read('CHANGES.txt')
         ),
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Environment :: Console',
         'Environment :: MacOS X',
         'Framework :: Buildout',
@@ -35,7 +35,10 @@ setuptools.setup(
         'Natural Language :: English',
         'Operating System :: MacOS :: MacOS X',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2.4',
         'Programming Language :: Python :: 2.5',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
         'Topic :: Software Development',
         'Topic :: Software Development :: Testing',
         'Topic :: Utilities',
@@ -53,7 +56,7 @@ setuptools.setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        'MacFSEvents',
+        'MacFSEvents > 0.2.1',
         'setuptools',
         ],
     extras_require=dict(

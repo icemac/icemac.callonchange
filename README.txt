@@ -10,7 +10,7 @@ Requirements
 ============
 
 * Mac OS X 10.5+ (Leopard)
-* Python 2.5
+* Python 2.4 till 2.7
 
 General usage
 =============

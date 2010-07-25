@@ -4,7 +4,9 @@ Changelog
 0.6 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Added compatibility with Python 2.4.
+
+- Now officially supporting Python 2.6 and 2.7, too.
 
 
 0.5 (2010-07-21)

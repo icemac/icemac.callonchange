@@ -19,13 +19,14 @@ def callonchange(*args):
     observer = icemac.callonchange.observer.Observer(path, params, **options)
     observer.start()
     try:
-        while True:
-            # Sleep, waiting for keyboard interrupts does not cost too
-            # much resources. The observer runs in a different thread.
-            time.sleep(1)
-    except KeyboardInterrupt:
-        # allow to stop the observer by pressing ^C, this ends the
-        # while True loop.
-        pass
+        try:
+            while True:
+                # Sleep, waiting for keyboard interrupts does not cost too
+                # much resources. The observer runs in a different thread.
+                time.sleep(1)
+        except KeyboardInterrupt:
+            # allow to stop the observer by pressing ^C, this ends the
+            # while True loop.
+            pass
     finally:
         observer.stop()

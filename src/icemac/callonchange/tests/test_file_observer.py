@@ -34,14 +34,15 @@ class TestFileObserver(icemac.callonchange.testing.ObserverTestBase):
         observer = self.createObserver(
             dir=dir, script=script, quite=quite, **kw)
         try:
-            observer.start()
-            self.writeFile(os.path.join(self.basedir, filename),
-                           mode=filemode)
-            time.sleep(1)
-        except KeyboardInterrupt:
-            # Do not care about KeyboardInterrupt here as it is raised
-            # when the script cannot be found.
-            pass
+            try:
+                observer.start()
+                self.writeFile(os.path.join(self.basedir, filename),
+                               mode=filemode)
+                time.sleep(1)
+            except KeyboardInterrupt:
+                # Do not care about KeyboardInterrupt here as it is raised
+                # when the script cannot be found.
+                pass
         finally:
             observer.stop()
 

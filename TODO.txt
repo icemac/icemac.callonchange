@@ -12,5 +12,3 @@ Ideas
   result in a call when it occurred during this time.
 
 - The options of callonchange should have long variants, too.
-
-- Compatibility with Python versions beside 2.5 would be nice.

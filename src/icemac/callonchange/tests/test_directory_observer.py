@@ -16,15 +16,16 @@ class TestDirectoryObserver(icemac.callonchange.testing.ObserverTestBase):
         observer = self.createObserver(
             dir=dir, script=script, quite=quite, **kw)
         try:
-            observer.start()
-            os.mkdir(os.path.join(self.basedir, '1'))
-            time.sleep(1)
-        except KeyboardInterrupt:
-            # When an OSError occurres during script call a
-            # KeyboardInterrupt is raised to stop the whole
-            # process. But this is the test which should not get
-            # stopped.
-            pass
+            try:
+                observer.start()
+                os.mkdir(os.path.join(self.basedir, '1'))
+                time.sleep(1)
+            except KeyboardInterrupt:
+                # When an OSError occurres during script call a
+                # KeyboardInterrupt is raised to stop the whole
+                # process. But this is the test which should not get
+                # stopped.
+                pass
         finally:
             observer.stop()
 
