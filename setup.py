@@ -18,7 +18,7 @@ setuptools.setup(
     name='icemac.callonchange',
     version=version,
     description=(
-        "Call a command when a directory or file changes. (Mac OS only)"),
+        "Call a command when a directory or file has changed. (Mac OS only)"),
     long_description=(
         read('README.txt') +
         read('TODO.txt') +
