@@ -56,7 +56,7 @@ setuptools.setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        'MacFSEvents > 0.2.1',
+        'MacFSEvents > 0.2.2',
         'setuptools',
         ],
     extras_require=dict(
