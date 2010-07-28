@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.6 (unreleased)
+0.6 (2010-07-28)
 ----------------
 
 - Added compatibility with Python 2.4.
