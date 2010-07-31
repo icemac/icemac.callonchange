@@ -166,7 +166,7 @@ Similar tools
   tests.
 
 * autonose_: "continuous test tracker / runner for nosetests" Seems to
-  focus on nose tests. Version 0.1.3 only acts on changes of python
+  focus on nose tests. Version 0.1.4 only acts on changes of python
   files. Detects file changes not using file system events. So it is
   slow on lager code bases.
 
