@@ -168,9 +168,19 @@ Similar tools
 * autonose_: "continuous test tracker / runner for nosetests" Seems to
   focus on nose tests. Version 0.1.4 only acts on changes of python
   files. Detects file changes not using file system events. So it is
-  slow on lager code bases.
+  slow on larger code bases.
+
+* PyZen_: "Continuous testing for paranoid developers." Seems to be tightly
+  integrated into python's `unittest` framework and Django. Detects file
+  changes using comparison of file modification time stamps. So it is slow
+  on larger code bases. Version 0.1 has no tests.
+
+* Flask-Zen_: "Flask-Script commands to integrate with PyZen." Light layer
+  around PyZen to integrate it into Flask. Version 0.1 has no tests.
 
 
 .. _pest: http://pypi.python.org/pypi/pest
 .. _sniffer: http://pypi.python.org/pypi/sniffer
 .. _autonose: http://pypi.python.org/pypi/autonose
+.. _PyZen: http://pypi.python.org/pypi/PyZen
+.. _Flask-Zen: http://pypi.python.org/pypi/Flask-Zen
