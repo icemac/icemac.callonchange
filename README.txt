@@ -161,9 +161,8 @@ Similar tools
   no automatic tests.
 
 * sniffer_: "An automatic test runner. Supports nose out of the box."
-  Supports Linux, Windows and Mac OS X. But in current version (0.1.3)
-  Windows and Mac OS X are untested. Current version has no automatic
-  tests.
+  Supports Linux, Windows and Mac OS X. But in current version (0.1.5)
+  Windows is untested. Current version has no automatic tests.
 
 * autonose_: "continuous test tracker / runner for nosetests" Seems to
   focus on nose tests. Version 0.1.4 only acts on changes of python
