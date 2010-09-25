@@ -172,10 +172,17 @@ Similar tools
 * PyZen_: "Continuous testing for paranoid developers." Seems to be tightly
   integrated into python's `unittest` framework and Django. Detects file
   changes using comparison of file modification time stamps. So it is slow
-  on larger code bases. Version 0.1 has no tests.
+  on larger code bases. Version 0.1 has no automatic tests.
 
 * Flask-Zen_: "Flask-Script commands to integrate with PyZen." Light layer
-  around PyZen to integrate it into Flask. Version 0.1 has no tests.
+  around PyZen to integrate it into Flask. Version 0.1 has no automatic
+  tests.
+
+* nosier_: "Monitors paths and upon detecting changes runs the specified
+  command" It is however limited to Linux 2.6 since it depends on the
+  inotify facility. Uses black lists and white lists for files thos changes
+  sould be tracked and has some other nice features. Version 1.1 has no
+  automatic tests.
 
 
 .. _pest: http://pypi.python.org/pypi/pest
@@ -183,3 +190,4 @@ Similar tools
 .. _autonose: http://pypi.python.org/pypi/autonose
 .. _PyZen: http://pypi.python.org/pypi/PyZen
 .. _Flask-Zen: http://pypi.python.org/pypi/Flask-Zen
+.. _nosier: http://pypi.python.org/pypi/nosier

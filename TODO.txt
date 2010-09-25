@@ -8,7 +8,11 @@ Ideas
 
 - In buildout recipe: default script name should be section name.
 
-- A minimal time between calls might be nice, so a change does not
-  result in a call when it occurred during this time.
+- A minimal time between calls (delay) might be nice, so a change does not
+  result in a call of the utility when it occurred during the delay time.
 
 - The options of callonchange should have long variants, too.
+
+- White list/black list approach of nosier seems to be nice.
+
+- Configurable inital run of the utility would be nice.
