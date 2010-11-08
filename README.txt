@@ -165,7 +165,7 @@ Similar tools
   Windows is untested. Current version has no automatic tests.
 
 * autonose_: "continuous test tracker / runner for nosetests" Seems to
-  focus on nose tests. Version 0.1.4 only acts on changes of python
+  focus on nose tests. Version 0.1.5 only acts on changes of python
   files. Detects file changes not using file system events. So it is
   slow on larger code bases.
 
