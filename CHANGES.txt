@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.7 (unreleased)
-----------------
+0.6.1 (2010-12-11)
+------------------
 
 - Made tests more robust.
 
