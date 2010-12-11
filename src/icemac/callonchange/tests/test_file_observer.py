@@ -16,7 +16,7 @@ class TestFileObserver(icemac.callonchange.testing.ObserverTestBase):
         # my_file.flush and os.fsync are not enough (at least on my
         # MacBook Pro), so I write really big files hopefully beyond
         # the cache size.
-        my_file.write(10000000*'asdf')
+        my_file.write(10000000 * 'asdf')
         my_file.flush()
         os.fsync(my_file.fileno())
         my_file.close()

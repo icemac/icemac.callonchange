@@ -29,7 +29,6 @@ class TestDirectoryObserver(icemac.callonchange.testing.ObserverTestBase):
         finally:
             observer.stop()
 
-
     def test_observer_called_on_changed_dir(self):
         # Assert that the script is called when something inside the
         # observed directory changes.

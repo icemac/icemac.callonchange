@@ -62,8 +62,8 @@ def fileCallbackFactory(extensions, quite, *params):
 class Observer(object):
     "Observer for path."
 
-    extensions = [] # only call utility when a file with this ext changed
-    quite = False # when True, do not print any non-error output
+    extensions = []  # only call utility when a file with this ext changed
+    quite = False  # when True, do not print any non-error output
 
     def __init__(self, path, params, **options):
         self.path = path

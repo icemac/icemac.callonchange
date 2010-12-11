@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) 2010 Michael Howitz
 # See also LICENSE.txt
-
 import zc.buildout.easy_install
 
 
@@ -16,7 +15,8 @@ class Recipe(object):
         self.executable = buildout['buildout']['executable']
         self.bin_directory = buildout['buildout']['bin-directory']
         self.eggs_directory = buildout['buildout']['eggs-directory']
-        self.develop_eggs_directory = buildout['buildout']['develop-eggs-directory']
+        self.develop_eggs_directory = (
+            buildout['buildout']['develop-eggs-directory'])
         links = buildout['buildout'].get('find-links', ())
         if links:
             links = links.split()
@@ -45,6 +45,5 @@ class Recipe(object):
             scripts=self.scripts,
             arguments=self.arguments,
             )
-
 
     update = install

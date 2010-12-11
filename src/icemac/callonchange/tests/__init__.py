@@ -2,6 +2,7 @@
 # Copyright (c) 2010 Michael Howitz
 # See also LICENSE.txt
 
+
 def additional_tests():
     # needed function to find doctests when runing `python setup.py test`
     import test_recipe

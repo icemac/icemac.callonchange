@@ -128,4 +128,3 @@ class TestMangle(unittest.TestCase):
                           ['bin/test'],
                           expected_options(quite=True)), result)
         self.assertEqual(stdout, '')
-
