@@ -68,12 +68,10 @@ class ObserverTestBase(unittest.TestCase):
     def assertScriptCalled(self):
         "Assert that the script got called."
         # Wait a bit as the events are processed in a differend thread.
-        time.sleep(1)
         self.assertEqual('script called',
                          file(os.path.join(self.tempdir, 'result')).read())
 
     def assertScriptNotCalled(self):
         "Assert that the script got not called."
         # Wait a bit as so the event can get propagated.
-        time.sleep(1)
         self.failIf(os.path.exists(os.path.join(self.tempdir, 'result')))

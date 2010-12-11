@@ -156,6 +156,8 @@ icemac.callonchange is based on.
 Similar tools
 =============
 
+(Sorted by the time I got to know them.)
+
 * pest_: "Auto tester for python" Seems to be designed to run tests
   and nothing else. Has growl integration. Current version (1.0.3) has
   no automatic tests.
@@ -184,6 +186,13 @@ Similar tools
   sould be tracked and has some other nice features. Version 1.1 has no
   automatic tests.
 
+* supcut_: "Simple unobtrusive Python continuous unit testing" It is limited
+  to Linux as it depends on inotify. Expects some of its template files are
+  installed in `/usr/share/doc/python-supcut/examples`. Although it always
+  talks about running nose tests, it might be used for arbitrary calls,
+  too. Can send e-mails about test run. Version 0.5.1 has no automatic
+  tests.
+
 
 .. _pest: http://pypi.python.org/pypi/pest
 .. _sniffer: http://pypi.python.org/pypi/sniffer
@@ -191,3 +200,4 @@ Similar tools
 .. _PyZen: http://pypi.python.org/pypi/PyZen
 .. _Flask-Zen: http://pypi.python.org/pypi/Flask-Zen
 .. _nosier: http://pypi.python.org/pypi/nosier
+.. _supcut: http://pypi.python.org/pypi/supcut

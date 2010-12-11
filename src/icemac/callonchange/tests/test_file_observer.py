@@ -36,9 +36,11 @@ class TestFileObserver(icemac.callonchange.testing.ObserverTestBase):
         try:
             try:
                 observer.start()
+                # Wait a bit so the observer can set up its observation
+                # routine:
+                time.sleep(1)
                 self.writeFile(os.path.join(self.basedir, filename),
                                mode=filemode)
-                time.sleep(1)
             except KeyboardInterrupt:
                 # Do not care about KeyboardInterrupt here as it is raised
                 # when the script cannot be found.
@@ -90,7 +92,7 @@ class TestFileObserver(icemac.callonchange.testing.ObserverTestBase):
         self.assertScriptCalled()
 
     def test_matching_extension_not_quite(self):
-        # When the quite option is not set a message about the called
+        # When the quite option is not set, a message about the called
         # script is displayed.
         stdout, result = icemac.callonchange.testing.grapStdout(
             self.callFUT, 'one.py', quite=False, extensions=['.py'])

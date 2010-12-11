@@ -4,7 +4,9 @@ Changelog
 0.7 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Made tests more robust.
+
+- Added more similar tools to the list.
 
 
 0.6 (2010-07-28)
