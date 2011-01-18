@@ -25,6 +25,8 @@ Options:
   -h, --help    show this help message and exit
   -e EXTENSION  only call utility on changes of a file with this extension
                 (option might be used multiple times)
+  -i            Run utility immediately after callonchange has been started.
+                (By default the utility is only run when something changed.)
   -q            Do not display any output of callonchange. (Still displays the
                 output of the utility.)
 
@@ -83,11 +85,12 @@ Add a section to your buildout to generate a script for callonchange
 
 This creates a callonchange script with default arguments. These are::
 
-  '-e', 'py', '-e', 'zcml', '-e', 'pt', '-e', 'txt', 'src', 'bin/test', '-cv'
+  '-i', '-e', 'py', '-e', 'zcml', '-e', 'pt', '-e', 'txt', 'src', 'bin/test', '-cv'
 
 Which means: observe in the `src` directory files with the extensions
-py, zcml, pt and txt. Call ``bin/test`` with the arguments cv (verbose
-and color) on changes.
+py, zcml, pt and txt. Call ``bin/test`` with the arguments ``cv`` (verbose
+and color) when callonchange has been invoked and later on when something
+has changed.
 
 Installation with customized arguments
 --------------------------------------

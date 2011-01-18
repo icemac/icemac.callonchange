@@ -15,8 +15,6 @@ Ideas
 
 - White list/black list approach of nosier seems to be nice.
 
-- Configurable inital run of the utility would be nice.
-
 - When observing large trees for changes of files with a specific extension,
   starting up the script can take while as the whole tree has to to be
   scanned once. During this start up period changes are not yet handled, so

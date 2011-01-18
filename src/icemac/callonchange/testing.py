@@ -11,16 +11,19 @@ import os.path
 import shutil
 import sys
 import tempfile
-import time
 import unittest
 
 
 def grapStdout(callable, *args, **kw):
-    "Grap the standard output and return it together with the result."
+    "Grab the standard output and return it together with the result."
     orig_stdout = sys.stdout
     sys.stdout = StringIO.StringIO()
     try:
-        result = callable(*args, **kw)
+        try:
+            result = callable(*args, **kw)
+        except SystemExit:
+            # Handled internally
+            result = ''
         return sys.stdout.getvalue(), result
     finally:
         sys.stdout = orig_stdout
@@ -41,7 +44,7 @@ class ObserverTestBase(unittest.TestCase):
         shutil.rmtree(self.tempdir)
 
     def createScript(self):
-        filename = os.path.join(self.basedir, 'script')
+        filename = os.path.join(self.tempdir, 'script')
         file = open(filename, 'w')
         file.write('#! /bin/bash\n')
         file.write('echo -n "script called" > "%s"\n' % os.path.join(

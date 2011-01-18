@@ -13,7 +13,9 @@ import thread
 
 
 def run_subprocess(quite, params):
-    "Run the given pramams in a subprocess."
+    "Run `params` in a subprocess."
+    if not quite:
+        print "Calling: %s" % " ".join(params)
     try:
         subprocess.Popen(params)
     except OSError, e:
@@ -25,19 +27,22 @@ def run_subprocess(quite, params):
         sys.exit(-1)
 
 
+def run_subprocess_from_thread(quite, params):
+    "Run `params` in a subprocess when the current thread is not the main one."
+    try:
+        run_subprocess(quite, params)
+    except SystemExit:
+        # Signal the process to exit as we are in a thread here.
+        thread.interrupt_main()
+
+
 def directoryCallbackFactory(quite, *params):
     "Create callback function for directory events."
     def callback(subpath, mask):
         # Subpath and mask of changes do not matter here. There is
         # currently no way (and no desire) to handle them over to the
         # subprocess.
-        if not quite:
-            print "Calling: %s" % " ".join(params)
-        try:
-            run_subprocess(quite, params)
-        except SystemExit:
-            # Signal the process to exit as we are in a thread here.
-            thread.interrupt_main()
+        run_subprocess_from_thread(quite, params)
     return callback
 
 
@@ -49,13 +54,7 @@ def fileCallbackFactory(extensions, quite, *params):
         if ext in extensions:
             # Only run process when extension of changed file is in
             # the list of observed file types
-            if not quite:
-                print "Calling: %s" % " ".join(params)
-            try:
-                run_subprocess(quite, params)
-            except SystemExit:
-                # We are in a thread here, so signal the main thread to exit.
-                thread.interrupt_main()
+            run_subprocess_from_thread(quite, params)
     return callback
 
 
@@ -64,6 +63,7 @@ class Observer(object):
 
     extensions = []  # only call utility when a file with this ext changed
     quite = False  # when True, do not print any non-error output
+    immediate = False  # run immediately after invocation
 
     def __init__(self, path, params, **options):
         self.path = path
@@ -73,6 +73,8 @@ class Observer(object):
             setattr(self, key, value)
 
     def start(self):
+        if self.immediate:
+            run_subprocess(self.quite, self.params)
         if self.extensions:
             # observe explicit file extensions
             callback = fileCallbackFactory(
@@ -113,9 +115,12 @@ def mangle_call_args(args, argv):
              "(option might be used multiple times)")
     parser.add_option(
         "-q", action="store_true", dest="quite", default=False,
-        help=(
-            "Do not display any output of callonchange. "
-            "(Still displays the output of the utility.)"))
+        help=("Do not display any output of callonchange. "
+              "(Still displays the output of the utility.)"))
+    parser.add_option(
+        "-i", action="store_true", dest="immediate", default=False,
+        help=("Run utility immediately after callonchange has been started."
+              "(By default the utility is only run when something changed.)"))
     parser.disable_interspersed_args()
 
     (options, parsed_args) = parser.parse_args(call_args)

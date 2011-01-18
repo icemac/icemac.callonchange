@@ -22,7 +22,7 @@ class TestFileObserver(icemac.callonchange.testing.ObserverTestBase):
         my_file.close()
 
     def callFUT(self, filename, filemode='w', dir=None, script=None,
-                quite=True, **kw):
+                quite=True, immediate=False, **kw):
         # Call the function under test.
         # filename ... name of the file which is to be created.
         # filemode ... mode of the created file, defaults to 'w'
@@ -32,15 +32,16 @@ class TestFileObserver(icemac.callonchange.testing.ObserverTestBase):
         # quite ... set quite option on observer
         # **kw ... additional options for observer
         observer = self.createObserver(
-            dir=dir, script=script, quite=quite, **kw)
+            dir=dir, script=script, quite=quite, immediate=immediate, **kw)
         try:
             try:
                 observer.start()
                 # Wait a bit so the observer can set up its observation
                 # routine:
                 time.sleep(1)
-                self.writeFile(os.path.join(self.basedir, filename),
-                               mode=filemode)
+                if not immediate:
+                    self.writeFile(os.path.join(self.basedir, filename),
+                                   mode=filemode)
             except KeyboardInterrupt:
                 # Do not care about KeyboardInterrupt here as it is raised
                 # when the script cannot be found.
@@ -107,3 +108,8 @@ class TestFileObserver(icemac.callonchange.testing.ObserverTestBase):
         os.mkdir(observe_dir)
         self.callFUT('one.py', dir=observe_dir, extensions=['.py'])
         self.assertScriptNotCalled()
+
+    def test_immediate(self):
+        # When "immediate" is set the utility is called without a change.
+        self.callFUT('one.py', extensions=['.py'], immediate=True)
+        self.assertScriptCalled()

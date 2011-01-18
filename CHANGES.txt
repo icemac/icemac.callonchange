@@ -4,7 +4,9 @@ Changelog
 0.6.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Added new option to run the utility immediately after invoking
+  callonchange. This option was also added to the default options when using
+  the recipe.
 
 
 0.6.1 (2010-12-11)

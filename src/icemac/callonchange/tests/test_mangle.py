@@ -9,7 +9,7 @@ import unittest
 
 # Options which are set by default by the mangle function when no
 # options are set. After adding new options enter them here:
-DEFAULT_OPTIONS = {'extensions': [], 'quite': False}
+DEFAULT_OPTIONS = {'extensions': [], 'quite': False, 'immediate': False}
 
 
 def expected_options(**options):
@@ -123,8 +123,17 @@ class TestMangle(unittest.TestCase):
     def test_quite(self):
         # The option -q makes callonchange quite.
         stdout, result = self.callFUT(['-q', '.', 'bin/test'])
-        # In the result the options dict contains a key for quite
+        # The result the options dict contains a key for "quite":
         self.assertEqual(('.',
                           ['bin/test'],
                           expected_options(quite=True)), result)
+        self.assertEqual(stdout, '')
+
+    def test_immediate(self):
+        # The option -i makes callonchange running immediately after start.
+        stdout, result = self.callFUT(['-i', '.', 'bin/test'])
+        # The result the options dict contains a key for "immediate":
+        self.assertEqual(('.',
+                          ['bin/test'],
+                          expected_options(immediate=True)), result)
         self.assertEqual(stdout, '')

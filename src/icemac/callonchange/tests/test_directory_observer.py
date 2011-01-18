@@ -11,14 +11,16 @@ import time
 class TestDirectoryObserver(icemac.callonchange.testing.ObserverTestBase):
     # Tests for the observation of all files in a directory.
 
-    def callFUT(self, dir=None, script=None, quite=True, **kw):
+    def callFUT(
+        self, dir=None, script=None, quite=True, immediate=False, **kw):
         # Call the function under test
         observer = self.createObserver(
-            dir=dir, script=script, quite=quite, **kw)
+            dir=dir, script=script, quite=quite, immediate=immediate, **kw)
         try:
             try:
                 observer.start()
-                os.mkdir(os.path.join(self.basedir, '1'))
+                if not immediate:
+                    os.mkdir(os.path.join(self.basedir, '1'))
                 time.sleep(1)
             except KeyboardInterrupt:
                 # When an OSError occurres during script call a
@@ -69,6 +71,30 @@ class TestDirectoryObserver(icemac.callonchange.testing.ObserverTestBase):
         observer = self.createObserver()
         stdout, ignored = icemac.callonchange.testing.grapStdout(
             self.callFUT, script='not-existing-script.sh', quite=False)
+        self.assertEqual(
+            "Calling: not-existing-script.sh\n"
+            "OSError: [Errno 2] No such file or directory\n", stdout)
+
+    def test_immediate(self):
+        # When "immediate" is set the utility is called without a change.
+        self.callFUT(immediate=True)
+        self.assertScriptCalled()
+
+    def test_immediate_not_quite(self):
+        # When "immediate" is set, the "quite" flag is handled, too.
+        stdout, ignored = icemac.callonchange.testing.grapStdout(
+            self.callFUT, quite=False, immediate=True)
+        self.assertScriptCalled()
+        self.assert_(stdout.startswith('Calling: '))
+        self.assert_(stdout.endswith('script\n'))
+
+    def test_immediate_not_existing_script_not_quite(self):
+        # When "immediate" is set and the script does not exists, the
+        # "quite" flag is handled as usual.
+        observer = self.createObserver()
+        stdout, ignored = icemac.callonchange.testing.grapStdout(
+            self.callFUT, script='not-existing-script.sh', quite=False,
+            immediate=True)
         self.assertEqual(
             "Calling: not-existing-script.sh\n"
             "OSError: [Errno 2] No such file or directory\n", stdout)
