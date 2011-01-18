@@ -166,13 +166,12 @@ Similar tools
   no automatic tests.
 
 * sniffer_: "An automatic test runner. Supports nose out of the box."
-  Supports Linux, Windows and Mac OS X. But in current version (0.1.5)
-  Windows is untested. Current version has no automatic tests.
+  Supports Linux, Windows and Mac OS X. Current version (0.2.2) has no
+  automatic tests.
 
 * autonose_: "continuous test tracker / runner for nosetests" Seems to
-  focus on nose tests. Version 0.1.5 only acts on changes of python
-  files. Detects file changes not using file system events. So it is
-  slow on larger code bases.
+  focus on nose tests. Version 0.2 only acts on changes of python
+  files.
 
 * PyZen_: "Continuous testing for paranoid developers." Seems to be tightly
   integrated into python's `unittest` framework and Django. Detects file
