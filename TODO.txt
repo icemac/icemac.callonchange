@@ -20,3 +20,5 @@ Ideas
   scanned once. During this start up period changes are not yet handled, so
   a message would be nice when start up is done.
 
+- http://pypi.python.org/pypi/watchdog could be a way to get callonchange
+  running on Linux and Windows, too.
