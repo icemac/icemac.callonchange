@@ -29,6 +29,7 @@ setuptools.setup(
         'Environment :: Console',
         'Environment :: MacOS X',
         'Framework :: Buildout',
+        'Framework :: Buildout :: Recipe',
         'Intended Audience :: Developers',
         'License :: OSI Approved',
         'License :: OSI Approved :: Zope Public License',
