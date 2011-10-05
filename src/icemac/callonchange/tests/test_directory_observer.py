@@ -68,7 +68,7 @@ class TestDirectoryObserver(icemac.callonchange.testing.ObserverTestBase):
     def test_not_existing_script_not_quite(self):
         # When the script quite option is not set, the file called is
         # displayed, but it is not repeated in the error message.
-        observer = self.createObserver()
+        self.createObserver()
         stdout, ignored = icemac.callonchange.testing.grapStdout(
             self.callFUT, script='not-existing-script.sh', quite=False)
         self.assertEqual(
@@ -91,7 +91,7 @@ class TestDirectoryObserver(icemac.callonchange.testing.ObserverTestBase):
     def test_immediate_not_existing_script_not_quite(self):
         # When "immediate" is set and the script does not exists, the
         # "quite" flag is handled as usual.
-        observer = self.createObserver()
+        self.createObserver()
         stdout, ignored = icemac.callonchange.testing.grapStdout(
             self.callFUT, script='not-existing-script.sh', quite=False,
             immediate=True)

@@ -13,7 +13,7 @@ import thread
 
 
 def run_subprocess(quite, params):
-    "Run `params` in a subprocess."
+    """Run `params` in a subprocess."""
     if not quite:
         print "Calling: %s" % " ".join(params)
     try:
@@ -28,7 +28,7 @@ def run_subprocess(quite, params):
 
 
 def run_subprocess_from_thread(quite, params):
-    "Run `params` in a subprocess when the current thread is not the main one."
+    """Run `params` in a subprocess when the current thread is not the main one."""
     try:
         run_subprocess(quite, params)
     except SystemExit:
@@ -37,7 +37,7 @@ def run_subprocess_from_thread(quite, params):
 
 
 def directoryCallbackFactory(quite, *params):
-    "Create callback function for directory events."
+    """Create callback function for directory events."""
     def callback(subpath, mask):
         # Subpath and mask of changes do not matter here. There is
         # currently no way (and no desire) to handle them over to the
@@ -47,7 +47,7 @@ def directoryCallbackFactory(quite, *params):
 
 
 def fileCallbackFactory(extensions, quite, *params):
-    "Create callback function for file events."
+    """Create callback function for file events."""
     def callback(event):
         # event.name contains the absolute path to the changed file
         path, ext = os.path.splitext(event.name)
@@ -59,7 +59,7 @@ def fileCallbackFactory(extensions, quite, *params):
 
 
 class Observer(object):
-    "Observer for path."
+    """Observer for path."""
 
     extensions = []  # only call utility when a file with this ext changed
     quite = False  # when True, do not print any non-error output
@@ -99,7 +99,7 @@ class Observer(object):
 
 
 def mangle_call_args(args, argv):
-    "Combine buildout and sys.argv parameters into one list."
+    """Combine buildout and sys.argv parameters into one list."""
     call_args = list(tuple(args) + tuple(argv))
 
     parser = optparse.OptionParser(

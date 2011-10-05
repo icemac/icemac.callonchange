@@ -23,7 +23,9 @@ def expected_options(**options):
 
 class TestMangle(unittest.TestCase):
 
-    def callFUT(self, arg, argv=[]):
+    def callFUT(self, arg, argv=None):
+        if not argv:
+            argv = []
         return icemac.callonchange.testing.grapStdout(
             icemac.callonchange.observer.mangle_call_args, arg, argv)
 

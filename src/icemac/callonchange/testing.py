@@ -15,7 +15,7 @@ import unittest
 
 
 def grapStdout(callable, *args, **kw):
-    "Grab the standard output and return it together with the result."
+    """Grab the standard output and return it together with the result."""
     orig_stdout = sys.stdout
     sys.stdout = StringIO.StringIO()
     try:
@@ -24,6 +24,7 @@ def grapStdout(callable, *args, **kw):
         except SystemExit:
             # Handled internally
             result = ''
+        #noinspection PyUnresolvedReferences
         return sys.stdout.getvalue(), result
     finally:
         sys.stdout = orig_stdout
@@ -69,12 +70,12 @@ class ObserverTestBase(unittest.TestCase):
             dir, [script], quite=quite, **kw)
 
     def assertScriptCalled(self):
-        "Assert that the script got called."
+        """Assert that the script got called."""
         # Wait a bit as the events are processed in a differend thread.
         self.assertEqual('script called',
                          file(os.path.join(self.tempdir, 'result')).read())
 
     def assertScriptNotCalled(self):
-        "Assert that the script got not called."
+        """Assert that the script got not called."""
         # Wait a bit as so the event can get propagated.
         self.failIf(os.path.exists(os.path.join(self.tempdir, 'result')))
