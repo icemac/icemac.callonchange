@@ -28,7 +28,7 @@ def run_subprocess(quite, params):
 
 
 def run_subprocess_from_thread(quite, params):
-    """Run `params` in a subprocess when the current thread is not the main one."""
+    """Run `params` in a subprocess if current thread is not the main one."""
     try:
         run_subprocess(quite, params)
     except SystemExit:
