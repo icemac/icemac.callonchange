@@ -1,0 +1,14 @@
+syntax: glob
+
+*.egg-info
+*.pyc
+.installed.cfg
+.mr.developer.cfg
+MacFSEvents-*.egg
+bin
+develop-eggs
+parts
+zc.buildout-*.egg
+zope.exceptions-*.egg
+zope.interface-*.egg
+zope.testing-*.egg
