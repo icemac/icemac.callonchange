@@ -12,6 +12,7 @@ def read(*path_elements):
 version = '0.7.1dev'
 
 tests_require = ['zc.buildout',
+                 'zope.testing',
                 ]
 
 setuptools.setup(
@@ -57,7 +58,7 @@ setuptools.setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        'MacFSEvents > 0.2.2',
+        'MacFSEvents > 0.2.2, <= 0.2.5',
         'setuptools',
         ],
     extras_require=dict(

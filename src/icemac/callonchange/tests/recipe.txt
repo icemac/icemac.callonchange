@@ -39,7 +39,7 @@ When the section does not contain arguments the default arguments
 import icemac.callonchange.script
 <BLANKLINE>
 if __name__ == '__main__':
-    icemac.callonchange.script.callonchange('-i', '-e', 'py', '-e', 'zcml', '-e', 'pt', '-e', 'txt', 'src', 'bin/test', '-cv')
+    sys.exit(icemac.callonchange.script.callonchange('-i', '-e', 'py', '-e', 'zcml', '-e', 'pt', '-e', 'txt', 'src', 'bin/test', '-cv'))
 
 User defined arguments
 ======================
@@ -77,7 +77,7 @@ The entry point is called with the entered arguments:
 import icemac.callonchange.script
 <BLANKLINE>
 if __name__ == '__main__':
-    icemac.callonchange.script.callonchange('Products', 'bin/most-tests', '-vv')
+    sys.exit(icemac.callonchange.script.callonchange('Products', 'bin/most-tests', '-vv'))
 
 User defined script name
 ========================
