@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) 2010-2011 Michael Howitz
 # See also LICENSE.txt
-
 import os.path
 import setuptools
+import sys
+
 
 def read(*path_elements):
     return "\n\n" + file(os.path.join(*path_elements)).read()
@@ -14,6 +15,9 @@ version = '0.7.1dev'
 tests_require = ['zc.buildout',
                  'zope.testing',
                 ]
+
+if sys.version_info[:2] < (2, 7):
+    tests_require.append('unittest2')
 
 setuptools.setup(
     name='icemac.callonchange',

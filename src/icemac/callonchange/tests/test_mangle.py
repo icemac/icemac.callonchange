@@ -4,12 +4,18 @@
 
 import icemac.callonchange.observer
 import icemac.callonchange.testing
-import unittest
+
+try:
+    import unittest2 as unittest
+except ImportError:
+    # We are on Python 2.7 so we do not need unittest2:
+    import unittest
 
 
 # Options which are set by default by the mangle function when no
 # options are set. After adding new options enter them here:
-DEFAULT_OPTIONS = {'extensions': [], 'quite': False, 'immediate': False}
+DEFAULT_OPTIONS = {'extensions': [], 'quite': False, 'immediate': False,
+                   'templates': [], 'create_templates': False}
 
 
 def expected_options(**options):
@@ -125,7 +131,7 @@ class TestMangle(unittest.TestCase):
     def test_quite(self):
         # The option -q makes callonchange quite.
         stdout, result = self.callFUT(['-q', '.', 'bin/test'])
-        # The result the options dict contains a key for "quite":
+        # The options dict contains a key for "quite":
         self.assertEqual(('.',
                           ['bin/test'],
                           expected_options(quite=True)), result)
@@ -134,8 +140,39 @@ class TestMangle(unittest.TestCase):
     def test_immediate(self):
         # The option -i makes callonchange running immediately after start.
         stdout, result = self.callFUT(['-i', '.', 'bin/test'])
-        # The result the options dict contains a key for "immediate":
+        # The options dict contains a key for "immediate":
         self.assertEqual(('.',
                           ['bin/test'],
                           expected_options(immediate=True)), result)
         self.assertEqual(stdout, '')
+
+    def test_create_templates_creates_the_template_file(self):
+        self.fail('fake homedir')
+        stdout, result = self.callFUT(['--create-templates'])
+        self.assertEqual((None, None, None), result)
+        self.failUnless(stdout.lower().startswith('success:'))
+        self.fail('test for created file in fake homedir')
+
+    def test_create_templates_cannot_run_twice(self):
+        self.fail('fake homedir')
+        stdout, result = self.callFUT(['--create-templates'])
+        stdout, result = self.callFUT(['--create-templates'])
+        self.assertEqual((None, None, None), result)
+        self.assertTrue(stdout.lower().startswith('error:'))
+
+
+
+    def test_the_template_option_is_replaced_by_the_template_contents(self):
+        self.fail('nimpl')
+
+    def test_recursive_usage_of_the_template_option_leads_to_an_error(self):
+        self.fail('nimpl')
+
+    def test_referencing_a_not_existing_template_leads_to_an_error(self):
+        self.fail('nimpl')
+
+    def test_using_the_template_option_without_templates_file_shows_error(
+            self):
+        stdout, result = self.callFUT(['-t', 'py', '.', 'bin/test'])
+        self.assertEqual((None, None, None), result)
+        self.failUnless(stdout.lower().startswith('error:'))

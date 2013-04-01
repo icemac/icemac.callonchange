@@ -12,6 +12,9 @@ import sys
 import thread
 
 
+TEMPLATE_FILE_NAME = '.callonchange.templates.ini'
+
+
 def run_subprocess(quite, params):
     """Run `params` in a subprocess."""
     if not quite:
@@ -111,16 +114,33 @@ def mangle_call_args(args, argv):
     parser.add_option(
         "-e", action="append", metavar="EXTENSION", dest="extensions",
         default=[],
-        help="only call utility on changes of a file with this extension "\
+        help="only call utility on changes of a file with this extension "
              "(option might be used multiple times)")
     parser.add_option(
+        "-i", action="store_true", dest="immediate", default=False,
+        help="Run utility immediately after callonchange has been started."
+            "(By default the utility is only run when something changed.)")
+
+    template_group = optparse.OptionGroup(parser, "Templating options")
+    template_group.add_option(
+        "-t", action="append", metavar="TEMPLATE-NAME", dest="templates",
+        default=[],
+        help="Replace the option with the referenced template from "
+             "%s in user's home directory." % TEMPLATE_FILE_NAME)
+    template_group.add_option(
+        "", "--create-templates", action="store_true", dest="create_templates",
+        default=False,
+        help="Create the templates file %s in user's home directory and fill "
+             "it with some examples." % TEMPLATE_FILE_NAME)
+    parser.add_option_group(template_group)
+
+    verbosity_group = optparse.OptionGroup(parser, "Verbosity options")
+    verbosity_group.add_option(
         "-q", action="store_true", dest="quite", default=False,
         help=("Do not display any output of callonchange. "
-              "(Still displays the output of the utility.)"))
-    parser.add_option(
-        "-i", action="store_true", dest="immediate", default=False,
-        help=("Run utility immediately after callonchange has been started."
-              "(By default the utility is only run when something changed.)"))
+              "(Still displays the output produces by the utility calls.)"))
+    parser.add_option_group(verbosity_group)
+    # Make sure <utility arguments> are _not_ used as our arguments:
     parser.disable_interspersed_args()
 
     (options, parsed_args) = parser.parse_args(call_args)
@@ -130,6 +150,15 @@ def mangle_call_args(args, argv):
     if len(parsed_args) < 2:
         parser.print_help()
         return None, None, None
+
+    if options.templates:
+        templates_path = os.path.expanduser(
+            os.path.join('~', TEMPLATE_FILE_NAME))
+        if not os.path.exists(templates_path):
+            print "Error: %s does not exists in %s."  % (
+                       TEMPLATE_FILE_NAME, os.path.expanduser('~'))
+            print "Use option --create-templates to create this file."
+            return None, None, None
 
     # For convinience it is allowed to omit the leading dots in of the
     # specified extension, so they get added here, as they are needed
