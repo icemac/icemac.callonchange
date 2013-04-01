@@ -195,6 +195,11 @@ Similar tools
   too. Can send e-mails about test run. Version 0.5.1 has no automatic
   tests.
 
+* rerun_: "Command-line executable Python script to re-run the given command
+  every time files are modified in the current directory or its
+  subdirectories." Runs OS independent but polls the change times of
+  files. Version 1.0.16 has no automatic tests.
+
 
 .. _pest: http://pypi.python.org/pypi/pest
 .. _sniffer: http://pypi.python.org/pypi/sniffer
@@ -203,3 +208,4 @@ Similar tools
 .. _Flask-Zen: http://pypi.python.org/pypi/Flask-Zen
 .. _nosier: http://pypi.python.org/pypi/nosier
 .. _supcut: http://pypi.python.org/pypi/supcut
+.. _rerun: http://pypi.python.org/pypi/rerun
