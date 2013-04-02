@@ -60,7 +60,7 @@ setuptools.setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        'MacFSEvents > 0.2.2, <= 0.2.5',
+        'MacFSEvents > 0.2.2, <= 0.2.6',
         'setuptools',
         ],
     extras_require=dict(
