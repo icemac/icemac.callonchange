@@ -5,8 +5,8 @@
 import os.path
 import setuptools
 
-def read(*path_elements):
-    return "\n\n" + file(os.path.join(*path_elements)).read()
+def read(path):
+    return file(os.path.join(*path.split('/'))).read()
 
 
 version = '0.7.1dev'
@@ -20,11 +20,13 @@ setuptools.setup(
     version=version,
     description=(
         "Call a command when a directory or file has changed. (Mac OS only)"),
-    long_description=(
-        read('README.txt') +
-        read('TODO.txt') +
-        read('CHANGES.txt')
-        ),
+    long_description=('\n\n'.join([
+        read('README.rst'),
+        read('CHANGES.rst'),
+        read('DOCS.rst'),
+        read('TODO.rst'),
+        read('HACKING.rst'),
+        ])),
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Console',

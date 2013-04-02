@@ -1,11 +1,3 @@
-icemac.callonchange calls a specific command when a directory or
-something in it has changed. It was developed to ease test driven
-development (TDD): it can call the test case under development each
-time the test case or the developed code changes.
-
-.. contents::
-
-
 Requirements
 ============
 
@@ -123,30 +115,6 @@ Stopping callonchange
 =====================
 
 To stop a running callonchange instance hit ^C (Control-C).
-
-
-Runing the tests
-================
-
-To run the tests of icemac.callonchange call::
-
-  $ python setup.py test
-
-or use buildout::
-
-  $ python bootstrap.py
-  $ bin/buildout
-  $ bin/test
-
-or use callonchange itself::
-
-  $ python bootstrap.py
-  $ bin/buildout
-  $ bin/callonchange
-
-In the last version you have to change something inside the `src`
-directory of the package so the observer lets the tests run.
-
 
 Thanks
 ======
