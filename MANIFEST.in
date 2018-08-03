@@ -1,0 +1,22 @@
+include *.py
+exclude bootstrap.py
+
+include *.rst
+include *.txt
+include .coveragerc
+include buildout.cfg
+
+include *.yml
+exclude *.yml
+
+include .hgignore
+exclude .hgignore
+
+include .hgtags
+exclude .hgtags
+
+
+exclude MANIFEST.in
+
+recursive-include src *.txt
+
