@@ -10,6 +10,8 @@ Changelog
 
 - Dropped support for Python < 2.7.
 
+- Changed license from ZPL to MIT.
+
 
 0.7.0 (2011-01-18)
 ------------------
