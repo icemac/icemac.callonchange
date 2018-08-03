@@ -93,9 +93,9 @@ class TestMangle(unittest.TestCase):
         # The (optional) extensions must come before the positional
         # arguments of path and callable.
         stdout, result = self.callFUT(
-            ['.', '-e', '.py',  'bin/test'])
+            ['.', '-e', '.py', 'bin/test'])
         # Option specification becomes part of the callable.
-        self.assertEqual(('.', ['-e', '.py',  'bin/test'], expected_options()),
+        self.assertEqual(('.', ['-e', '.py', 'bin/test'], expected_options()),
                          result)
         self.assertEqual(stdout, '')
 

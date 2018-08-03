@@ -5,15 +5,19 @@
 import os.path
 import setuptools
 
+
 def read(path):
-    return file(os.path.join(*path.split('/'))).read()
+    """Read a file from a path."""
+    with open(os.path.join(*path.split('/'))) as f:
+        return f.read()
 
 
 version = '0.7.1dev'
 
-tests_require = ['zc.buildout',
-                 'zope.testing',
-                ]
+tests_require = [
+    'zc.buildout',
+    'zope.testing',
+]
 
 setuptools.setup(
     name='icemac.callonchange',
@@ -26,7 +30,7 @@ setuptools.setup(
         read('DOCS.rst'),
         read('TODO.rst'),
         read('HACKING.rst'),
-        ])),
+    ])),
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Console',
@@ -46,7 +50,7 @@ setuptools.setup(
         'Topic :: Software Development',
         'Topic :: Software Development :: Testing',
         'Topic :: Utilities',
-        ],
+    ],
     keywords=(
         'mac os event fs filesystem call change command tdd '
         'test driven development'),
@@ -55,14 +59,14 @@ setuptools.setup(
     url='http://pypi.python.org/icemac.callonchange',
     license='ZPL 2.1',
     packages=setuptools.find_packages('src'),
-    package_dir = {'': 'src'},
-    namespace_packages = ['icemac'],
+    package_dir={'': 'src'},
+    namespace_packages=['icemac'],
     include_package_data=True,
     zip_safe=False,
     install_requires=[
         'MacFSEvents > 0.2.2, <= 0.2.6',
         'setuptools',
-        ],
+    ],
     extras_require=dict(
         test=tests_require),
     entry_points="""
@@ -73,4 +77,4 @@ setuptools.setup(
       """,
     tests_require=tests_require,
     test_suite="icemac.callonchange.tests",
-    )
+)
