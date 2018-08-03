@@ -37,13 +37,6 @@ Changelog
 - Now officially supporting Python 2.6 and 2.7, too.
 
 
-0.5 (2010-07-21)
-----------------
-
-- Added `--version` option to callonchange.
-
-- Added another similar tool to the list.
-
 Older changes
 -------------
 

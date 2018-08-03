@@ -3,6 +3,13 @@ Older Changelog
 
 *Newer changes see CHANGES.rst.*
 
+0.5 (2010-07-21)
+----------------
+
+- Added `--version` option to callonchange.
+
+- Added another similar tool to the list.
+
 
 0.4 (2010-07-16)
 ----------------
