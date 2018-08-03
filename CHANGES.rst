@@ -1,8 +1,8 @@
 Changelog
 =========
 
-0.7.1 (unreleased)
-------------------
+0.8 (2018-08-03)
+----------------
 
 - Fixed tests to run with `zc.buildout >=1.7`.
 

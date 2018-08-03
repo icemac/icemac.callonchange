@@ -12,7 +12,7 @@ def read(path):
         return f.read()
 
 
-version = '0.7.1dev'
+version = '0.8'
 
 tests_require = [
     'zc.buildout',
