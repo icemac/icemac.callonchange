@@ -78,4 +78,4 @@ class ObserverTestBase(unittest.TestCase):
     def assertScriptNotCalled(self):
         """Assert that the script got not called."""
         # Wait a bit as so the event can get propagated.
-        self.failIf(os.path.exists(os.path.join(self.tempdir, 'result')))
+        self.assertFalse(os.path.exists(os.path.join(self.tempdir, 'result')))

@@ -33,19 +33,19 @@ class TestMangle(unittest.TestCase):
         # With no arguments supplied, usage is shown.
         stdout, result = self.callFUT([])
         self.assertEqual((None, None, None), result)
-        self.failUnless(stdout.lower().startswith('usage:'))
+        self.assertTrue(stdout.lower().startswith('usage:'))
 
     def test_missing_params(self):
         # With not enough arguments supplied, usage is shown.
         stdout, result = self.callFUT(['.'])
         self.assertEqual((None, None, None), result)
-        self.failUnless(stdout.lower().startswith('usage:'))
+        self.assertTrue(stdout.lower().startswith('usage:'))
 
     def test_only_extension(self):
         # With only extensions supplied, usage is shown.
         stdout, result = self.callFUT(['-e', '.py'])
         self.assertEqual((None, None, None), result)
-        self.failUnless(stdout.lower().startswith('usage:'))
+        self.assertTrue(stdout.lower().startswith('usage:'))
 
     def test_no_additional_args(self):
         # Without additional arguments the default arguments are used.
