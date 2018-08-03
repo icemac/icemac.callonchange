@@ -7,7 +7,7 @@ There is a recipe to ease buildout integration.
 Default configuration
 =====================
 
-In the default configuration the recipe name is sufficiant in the
+In the default configuration the recipe name is sufficient in the
 buildout section:
 
 >>> write(sample_buildout, 'buildout.cfg',
@@ -26,7 +26,7 @@ After running buildout the script gets created in the `bin` directory:
 >>> buildout = os.path.join(sample_buildout, 'bin', 'buildout')
 >>> print system(buildout),
 Installing coc.
-Generated script '/.../sample-buildout/bin/callonchange'.
+Generated script '/.../sample-buildout/bin/callonchange'...
 >>> ls('bin')
 -  buildout
 -  callonchange
@@ -65,7 +65,7 @@ After running buildout the script gets created in the `bin` directory:
 >>> print system(buildout),
 Uninstalling coc.
 Installing coc.
-Generated script '/.../sample-buildout/bin/callonchange'.
+Generated script '/.../sample-buildout/bin/callonchange'...
 >>> ls('bin')
 -  buildout
 -  callonchange
@@ -103,7 +103,7 @@ After running buildout the script gets created in the `bin` directory:
 >>> print system(buildout),
 Uninstalling coc.
 Installing coc.
-Generated script '/.../sample-buildout/bin/coc'.
+Generated script '/.../sample-buildout/bin/coc'...
 >>> ls('bin')
 -  buildout
 -  coc
