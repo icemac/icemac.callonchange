@@ -2,6 +2,7 @@ syntax: glob
 
 *.egg-info
 *.pyc
+.DS_Store
 .installed.cfg
 .mr.developer.cfg
 MacFSEvents-*.egg
