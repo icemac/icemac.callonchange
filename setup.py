@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2010-2011 Michael Howitz
+# Copyright (c) 2010-2013, 2018 Michael Howitz
 # See also LICENSE.txt
 
 import os.path
@@ -41,9 +41,7 @@ setuptools.setup(
         'Natural Language :: English',
         'Operating System :: MacOS :: MacOS X',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2.4',
-        'Programming Language :: Python :: 2.5',
-        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2 :: Only',
         'Programming Language :: Python :: 2.7',
         'Topic :: Software Development :: Testing',
         'Topic :: Utilities',

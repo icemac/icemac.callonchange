@@ -8,7 +8,8 @@ Changelog
 
 - Moved source code to https://bitbucket.org/icemac/icemac.callonchange.
 
-- Officially dropped support of Python 2.4 as it is not supported at Travis-CI.
+- Dropped support for Python < 2.7.
+
 
 0.7.0 (2011-01-18)
 ------------------
