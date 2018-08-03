@@ -53,11 +53,11 @@ class ObserverTestBase(unittest.TestCase):
         file.flush()
         os.fsync(file.fileno())
         file.close()
-        os.chmod(filename, 0700)
+        os.chmod(filename, 0o700)
         return filename
 
     def createObserver(self, dir=None, script=None, quite=True, **kw):
-        # Create the observer which calles a predefined script.
+        # Create the observer which calls a predefined script.
         if dir is None:
             # By default observer the default directory.
             dir = self.basedir
@@ -71,9 +71,9 @@ class ObserverTestBase(unittest.TestCase):
 
     def assertScriptCalled(self):
         """Assert that the script got called."""
-        # Wait a bit as the events are processed in a differend thread.
+        # Wait a bit as the events are processed in a different thread.
         self.assertEqual('script called',
-                         file(os.path.join(self.tempdir, 'result')).read())
+                         open(os.path.join(self.tempdir, 'result')).read())
 
     def assertScriptNotCalled(self):
         """Assert that the script got not called."""
