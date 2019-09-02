@@ -1,8 +1,8 @@
 Requirements
 ============
 
-* Mac OS X 10.5+ (Leopard)
-* Python 2.7
+* Mac OS X 10.14 (Mojave)
+* Python 3.7
 
 General usage
 =============
@@ -40,7 +40,7 @@ Installation
 
 To install callonchange as script call::
 
-  $ python setup.py install
+  $ pip install icemac.callonchange
 
 or install it using a package manager like easy_install or pip.
 

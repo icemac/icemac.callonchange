@@ -24,7 +24,7 @@ After running buildout the script gets created in the `bin` directory:
 >>> import os, os.path
 >>> os.chdir(sample_buildout)
 >>> buildout = os.path.join(sample_buildout, 'bin', 'buildout')
->>> print system(buildout),
+>>> print(system(buildout))
 Installing coc.
 Generated script '/.../sample-buildout/bin/callonchange'...
 >>> ls('bin')
@@ -62,7 +62,7 @@ After running buildout the script gets created in the `bin` directory:
 >>> import os, os.path
 >>> os.chdir(sample_buildout)
 >>> buildout = os.path.join(sample_buildout, 'bin', 'buildout')
->>> print system(buildout),
+>>> print(system(buildout))
 Uninstalling coc.
 Installing coc.
 Generated script '/.../sample-buildout/bin/callonchange'...
@@ -100,7 +100,7 @@ After running buildout the script gets created in the `bin` directory:
 >>> import os, os.path
 >>> os.chdir(sample_buildout)
 >>> buildout = os.path.join(sample_buildout, 'bin', 'buildout')
->>> print system(buildout),
+>>> print(system(buildout))
 Uninstalling coc.
 Installing coc.
 Generated script '/.../sample-buildout/bin/coc'...

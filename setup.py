@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2010-2013, 2018 Michael Howitz
+# Copyright (c) 2010-2013, 2018-2019 Michael Howitz
 # See also LICENSE.txt
 
 import os.path
@@ -12,7 +12,7 @@ def read(path):
         return f.read()
 
 
-version = '0.9.dev0'
+version = '1.0.dev0'
 
 tests_require = [
     'zc.buildout',
@@ -41,8 +41,8 @@ setuptools.setup(
         'Natural Language :: English',
         'Operating System :: MacOS :: MacOS X',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2 :: Only',
-        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3 :: Only',
+        'Programming Language :: Python :: 3.7',
         'Topic :: Software Development :: Testing',
         'Topic :: Utilities',
     ],
@@ -58,8 +58,9 @@ setuptools.setup(
     namespace_packages=['icemac'],
     include_package_data=True,
     zip_safe=False,
+    python_requires='>=3.7',
     install_requires=[
-        'MacFSEvents > 0.2.2, <= 0.2.6',
+        'MacFSEvents < 0.8.1',
         'setuptools',
     ],
     extras_require=dict(

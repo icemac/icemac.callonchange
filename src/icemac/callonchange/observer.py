@@ -9,22 +9,24 @@ import os.path
 import pkg_resources
 import subprocess
 import sys
-import thread
+import _thread
 
 
 def run_subprocess(quite, params):
     """Run `params` in a subprocess."""
     if not quite:
-        print "Calling: %s" % " ".join(params)
+        print("Calling: %s" % " ".join(params))
     try:
-        subprocess.Popen(params)
-    except OSError, e:
+        process = subprocess.Popen(params)
+    except OSError as e:
         # On error it would be nice to have a hint why it failed:
-        print "OSError: [Errno %s] %s" % e.args
-        if  quite:
-            print "Parameters were: %s" % " ".join(params)
+        print("OSError: [Errno %s] %s" % e.args)
+        if quite:
+            print("Parameters were: %s" % " ".join(params))
         # Exit the observer on error.
         sys.exit(-1)
+    else:
+        process.wait(10)
 
 
 def run_subprocess_from_thread(quite, params):
@@ -33,7 +35,7 @@ def run_subprocess_from_thread(quite, params):
         run_subprocess(quite, params)
     except SystemExit:
         # Signal the process to exit as we are in a thread here.
-        thread.interrupt_main()
+        _thread.interrupt_main()
 
 
 def directoryCallbackFactory(quite, *params):
@@ -111,7 +113,7 @@ def mangle_call_args(args, argv):
     parser.add_option(
         "-e", action="append", metavar="EXTENSION", dest="extensions",
         default=[],
-        help="only call utility on changes of a file with this extension "\
+        help="only call utility on changes of a file with this extension "
              "(option might be used multiple times)")
     parser.add_option(
         "-q", action="store_true", dest="quite", default=False,

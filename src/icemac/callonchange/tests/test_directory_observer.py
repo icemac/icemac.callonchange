@@ -12,7 +12,7 @@ class TestDirectoryObserver(icemac.callonchange.testing.ObserverTestBase):
     # Tests for the observation of all files in a directory.
 
     def callFUT(
-        self, dir=None, script=None, quite=True, immediate=False, **kw):
+            self, dir=None, script=None, quite=True, immediate=False, **kw):
         # Call the function under test
         observer = self.createObserver(
             dir=dir, script=script, quite=quite, immediate=immediate, **kw)
@@ -23,7 +23,7 @@ class TestDirectoryObserver(icemac.callonchange.testing.ObserverTestBase):
                     os.mkdir(os.path.join(self.basedir, '1'))
                 time.sleep(1)
             except KeyboardInterrupt:
-                # When an OSError occurres during script call a
+                # When an OSError occurs during script call a
                 # KeyboardInterrupt is raised to stop the whole
                 # process. But this is the test which should not get
                 # stopped.
@@ -45,8 +45,8 @@ class TestDirectoryObserver(icemac.callonchange.testing.ObserverTestBase):
         stdout, ignored = icemac.callonchange.testing.grapStdout(
             self.callFUT, quite=False)
         self.assertScriptCalled()
-        self.assert_(stdout.startswith('Calling: '))
-        self.assert_(stdout.endswith('script\n'))
+        self.assertTrue(stdout.startswith('Calling: '))
+        self.assertTrue(stdout.endswith('script\n'))
 
     def test_observer_not_called_on_outside_change(self):
         # Assert that the script is _not_ called when something
@@ -62,7 +62,8 @@ class TestDirectoryObserver(icemac.callonchange.testing.ObserverTestBase):
         stdout, ignored = icemac.callonchange.testing.grapStdout(
             self.callFUT, script='not-existing-script.sh')
         self.assertEqual(
-            "OSError: [Errno 2] No such file or directory\n"
+            "OSError: [Errno 2] No such file or directory:"
+            " 'not-existing-script.sh'\n"
             "Parameters were: not-existing-script.sh\n", stdout)
 
     def test_not_existing_script_not_quite(self):
@@ -73,7 +74,8 @@ class TestDirectoryObserver(icemac.callonchange.testing.ObserverTestBase):
             self.callFUT, script='not-existing-script.sh', quite=False)
         self.assertEqual(
             "Calling: not-existing-script.sh\n"
-            "OSError: [Errno 2] No such file or directory\n", stdout)
+            "OSError: [Errno 2] No such file or directory:"
+            " 'not-existing-script.sh'\n", stdout)
 
     def test_immediate(self):
         # When "immediate" is set the utility is called without a change.
@@ -85,8 +87,8 @@ class TestDirectoryObserver(icemac.callonchange.testing.ObserverTestBase):
         stdout, ignored = icemac.callonchange.testing.grapStdout(
             self.callFUT, quite=False, immediate=True)
         self.assertScriptCalled()
-        self.assert_(stdout.startswith('Calling: '))
-        self.assert_(stdout.endswith('script\n'))
+        self.assertTrue(stdout.startswith('Calling: '))
+        self.assertTrue(stdout.endswith('script\n'))
 
     def test_immediate_not_existing_script_not_quite(self):
         # When "immediate" is set and the script does not exists, the
@@ -97,4 +99,5 @@ class TestDirectoryObserver(icemac.callonchange.testing.ObserverTestBase):
             immediate=True)
         self.assertEqual(
             "Calling: not-existing-script.sh\n"
-            "OSError: [Errno 2] No such file or directory\n", stdout)
+            "OSError: [Errno 2] No such file or directory:"
+            " 'not-existing-script.sh'\n", stdout)

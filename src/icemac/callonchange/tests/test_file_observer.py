@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2010-2011 Michael Howitz
+# Copyright (c) 2010-2011, 2019 Michael Howitz
 # See also LICENSE.txt
 
 import icemac.callonchange.testing
@@ -12,14 +12,8 @@ class TestFileObserver(icemac.callonchange.testing.ObserverTestBase):
     # Tests for the observation of specific files in a directory.
 
     def writeFile(self, path, mode='w'):
-        my_file = file(path, mode)
-        # my_file.flush and os.fsync are not enough (at least on my
-        # MacBook Pro), so I write really big files hopefully beyond
-        # the cache size.
-        my_file.write(10000000 * 'asdf')
-        my_file.flush()
-        os.fsync(my_file.fileno())
-        my_file.close()
+        with open(path, mode) as my_file:
+            my_file.write('asdf')
 
     def callFUT(self, filename, filemode='w', dir=None, script=None,
                 quite=True, immediate=False, **kw):
@@ -42,6 +36,7 @@ class TestFileObserver(icemac.callonchange.testing.ObserverTestBase):
                 if not immediate:
                     self.writeFile(os.path.join(self.basedir, filename),
                                    mode=filemode)
+                    time.sleep(1)
             except KeyboardInterrupt:
                 # Do not care about KeyboardInterrupt here as it is raised
                 # when the script cannot be found.
@@ -56,7 +51,8 @@ class TestFileObserver(icemac.callonchange.testing.ObserverTestBase):
             self.callFUT, 'one.py', script='file-not-existing-script.sh',
             extensions=['.py'])
         self.assertEqual(
-            "OSError: [Errno 2] No such file or directory\n"
+            "OSError: [Errno 2] No such file or directory:"
+            " 'file-not-existing-script.sh'\n"
             "Parameters were: file-not-existing-script.sh\n", stdout)
 
     def test_not_existing_script_not_quite(self):
@@ -68,7 +64,8 @@ class TestFileObserver(icemac.callonchange.testing.ObserverTestBase):
             quite=False, extensions=['.py'])
         self.assertEqual(
             "Calling: file-not-existing-script.sh\n"
-            "OSError: [Errno 2] No such file or directory\n", stdout)
+            "OSError: [Errno 2] No such file or directory:"
+            " 'file-not-existing-script.sh'\n", stdout)
 
     def test_not_matching_extension(self):
         # When the extension of the changed file inside the observed
@@ -85,11 +82,11 @@ class TestFileObserver(icemac.callonchange.testing.ObserverTestBase):
 
     def test_matching_extension_modify(self):
         # The script is also called when the extension of the changed
-        # file inside the observed directory is in the extenion list.
+        # file inside the observed directory is in the extension list.
         # Create a file which gets modified when under observation.
         path = os.path.join(self.basedir, 'one.py')
         self.writeFile(path)
-        self.callFUT('one.py', filemode='w+a', extensions=['.py'])
+        self.callFUT('one.py', filemode='a', extensions=['.py'])
         self.assertScriptCalled()
 
     def test_matching_extension_not_quite(self):
@@ -98,8 +95,8 @@ class TestFileObserver(icemac.callonchange.testing.ObserverTestBase):
         stdout, result = icemac.callonchange.testing.grapStdout(
             self.callFUT, 'one.py', quite=False, extensions=['.py'])
         self.assertScriptCalled()
-        self.assert_(stdout.startswith('Calling: '))
-        self.assert_(stdout.endswith('script\n'))
+        self.assertTrue(stdout.startswith('Calling: '))
+        self.assertTrue(stdout.endswith('script\n'))
 
     def test_matching_extension_but_outside_observed_dir(self):
         # When a file outside the observed dir changes the script does

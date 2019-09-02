@@ -4,7 +4,7 @@
 
 """Test helpers."""
 
-import StringIO
+import io
 import icemac.callonchange.observer
 import os
 import os.path
@@ -17,14 +17,14 @@ import unittest
 def grapStdout(callable, *args, **kw):
     """Grab the standard output and return it together with the result."""
     orig_stdout = sys.stdout
-    sys.stdout = StringIO.StringIO()
+    sys.stdout = io.StringIO()
     try:
         try:
             result = callable(*args, **kw)
         except SystemExit:
             # Handled internally
             result = ''
-        #noinspection PyUnresolvedReferences
+        # noinspection PyUnresolvedReferences
         return sys.stdout.getvalue(), result
     finally:
         sys.stdout = orig_stdout
@@ -72,8 +72,8 @@ class ObserverTestBase(unittest.TestCase):
     def assertScriptCalled(self):
         """Assert that the script got called."""
         # Wait a bit as the events are processed in a different thread.
-        self.assertEqual('script called',
-                         open(os.path.join(self.tempdir, 'result')).read())
+        with open(os.path.join(self.tempdir, 'result')) as s:
+            self.assertEqual('script called', s.read())
 
     def assertScriptNotCalled(self):
         """Assert that the script got not called."""

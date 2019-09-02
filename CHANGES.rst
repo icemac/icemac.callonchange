@@ -1,10 +1,12 @@
 Changelog
 =========
 
-0.9 (unreleased)
+1.0 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Added support for Python 3.7.
+
+- Dropped support for Python < 3.7.
 
 
 0.8 (2018-08-03)
