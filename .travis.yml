@@ -1,5 +1,16 @@
-language: python
-python:
-  - 2.7
+os: osx
+osx_image: xcode11
+language: sh
+env:
+  - HOMEBREW_NO_INSTALL_CLEANUP=1
+    HOMEBREW_NO_ANALYTICS=1
+addons:
+  homebrew:
+    packages: python3
+before_install:
+  - python3 -m venv .
+install:
+  - bin/pip install zc.buildout
+  - bin/buildout
 script:
-  - python setup.py test
+  - bin/test -cv
