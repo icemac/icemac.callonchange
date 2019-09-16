@@ -51,7 +51,7 @@ setuptools.setup(
         'test driven development'),
     author='Michael Howitz',
     author_email='icemac@gmx.net',
-    url='http://pypi.python.org/icemac.callonchange',
+    url='https://github.com/icemac/icemac.callonchange',
     license='MIT',
     packages=setuptools.find_packages('src'),
     package_dir={'': 'src'},

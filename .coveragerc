@@ -4,7 +4,6 @@ source = icemac.callonchange
 
 [report]
 precision = 2
-omit = */tests/*
 
 [html]
 directory = htmlcov

@@ -8,6 +8,8 @@ Changelog
 
 - Dropped support for Python < 3.7.
 
+- Moved the code to GitHub.
+
 
 0.8 (2018-08-03)
 ----------------

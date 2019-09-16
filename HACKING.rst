@@ -6,18 +6,15 @@ Source code
 
 Get the source code::
 
-   $ hg clone https://bitbucket.org/icemac/icemac.callonchange
+   $ git clone https://github.com/icemac/icemac.callonchange
 
-or fork me on: https://bitbucket.org/icemac/icemac.callonchange
+or fork me on: https://github.com/icemac/icemac.callonchange
 
 Running Tests
 -------------
 
-(Currently not running successfully on Travis-CI until Mac OS X gets
-supported there.)
-
-.. image:: https://secure.travis-ci.org/icemac/icemac.callonchange.png
-   :target: https://travis-ci.org/icemac/icemac.callonchange
+.. image:: https://travis-ci.com/icemac/icemac.callonchange.svg?branch=master
+    :target: https://travis-ci.com/icemac/icemac.callonchange
 
 To run the tests of `icemac.callonchange` call::
 
@@ -35,5 +32,5 @@ or use `callonchange` itself::
   $ bin/buildout
   $ bin/callonchange
 
-In the last version you have to change something inside the `src`
+In the last variant you have to change something inside the `src`
 directory of the package so the observer lets the tests run.
